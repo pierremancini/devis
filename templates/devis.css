@@ -1,0 +1,53 @@
+.client {
+  text-align: right;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin: 1em;
+}
+
+body {
+  font-size: 11px
+}
+
+.devis {
+  text-align: center;
+}
+
+.box {
+  border: solid;
+  border-width: thin;
+}
+
+.payer{
+  font-weight: bold;
+  text-align: right;
+}
+
+thead, tfoot { 
+  display: table-header-group;
+  display: table-row-group;
+}
+
+table {
+  text-align: center;
+}
+
+#content {
+  display: table;
+}
+
+@page {
+  @top-right {
+    content: element(pageHeader);
+  }
+
+  @bottom-right {
+       content: counter(page) "/" counter(pages);
+   }
+}
+
+#pageHeader{
+  position: running(pageHeader);
+}
