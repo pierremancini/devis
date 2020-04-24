@@ -1,2 +1,4 @@
 exemples
 *.pdf
+.vscode
+templates/images
