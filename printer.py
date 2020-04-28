@@ -38,7 +38,7 @@ template_var = {
     'telephone_client': client.telephone,
     'fax_client': client.fax,
     'email_client': client.email,
-    'table_prix': prix.hebergement
+    'data_price': prix.hebergement
 }
 
 

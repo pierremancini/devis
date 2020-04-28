@@ -35,14 +35,17 @@
       <tr>
         <th>Désignation</th><th>Quantité</th><th>Prix (HT)</th>
       </tr>
-      {% for line in table_prix %}
+      {% for line in data_price.grille %}
         <tr>
-          <td>{{ line.designation }}</td><td>{{ line.quantité }}</td><td>{{ line.prix }}</td>
+          <td>{{ line.designation }}</td>
+          <td>{{ line.quantité }}</td>
+          <td>{{ line.prix }} {{ "{:.2f}".format(data_price.devise) }}</td>
         </tr>
       {% endfor %}
     </table>
 
-    <div class="box">TVA non applicable - article 293 B du Code Général des Impôts  <div class="payer">  Net à payer 8,78 € / mois </div></div>
+    <div class="box"> TVA non applicable - article 293 B du Code Général des Impôts  <div class="payer">  Net à payer {{ "{:.2f}".format(data_price.grille|sum(attribute='prix')) }} {{ data_price.devise }} </div>
+    </div>
     <br/>
     <p>Durée de validité du devis: 90 jours </p><br/>
 
