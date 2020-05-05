@@ -4,7 +4,11 @@
     margin: 1.75em;
     size: letter portrait;
   }
-
+  .box {
+    border: solid;
+    border-width: thin;
+    page-break-inside: avoid;
+  }
 }
 
 .client {
