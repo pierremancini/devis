@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Devis site web</title>
+      <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
+  </head>
+  <body>
+    <h2 class="subtitle devis"> {{ devis.titre }}</h2>
+    <div class="box"><p>{{ emeteur.nom }}<br/>
+      {{ emeteur.adresse }}<br/>
+      E-mail: {{ emeteur.email }}<br/>
+      Télépĥone: {{ emeteur.telephone }}<br/>
+      SIRET: {{ emeteur.SIRET }}<br/>
+      Code APE: {{ emeteur.code_APE }}</p>
+    </div>
+    <button>Créer émeteur</button>
+  </body>
+</html>

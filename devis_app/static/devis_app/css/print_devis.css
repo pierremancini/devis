@@ -1,0 +1,48 @@
+@media print {
+
+  @page {
+    margin: 1.75em;
+    size: letter portrait;
+  }
+  .box {
+    border: solid;
+    border-width: thin;
+    page-break-inside: avoid;
+  }
+}
+
+.client {
+  text-align: right;
+}
+
+.subtitle {
+  font-size: 12px;
+  margin-bottom: 0.1em;
+}
+
+body {
+  font-size: 10px
+}
+
+.devis {
+  text-align: center;
+}
+
+.box {
+  border: solid;
+  border-width: thin;
+}
+
+.payer{
+  font-weight: bold;
+  text-align: right;
+}
+
+
+table {
+  text-align: center;
+}
+
+#content {
+  display: table;
+}
