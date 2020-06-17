@@ -40,7 +40,6 @@ $(document).ready(function(){
 
 
   // --- Code gérant les évènements après chargement de la page
-
   $(".tabs .tab-links a").click(function(e) {
     var currentAttrValue = jQuery(this).attr('href');
     jQuery(currentAttrValue).css('display', 'block').siblings(".panel").css('display', 'none');
@@ -99,5 +98,8 @@ $(document).ready(function(){
     // calcul du total
     set_total();
   });
+
+  $("#id_date_creation").datepicker();
+  $("#id_date_emission").datepicker();
 });
 
