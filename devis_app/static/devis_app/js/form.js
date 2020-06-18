@@ -42,7 +42,7 @@ $(document).ready(function(){
   // --- Code gérant les évènements après chargement de la page
   $(".tabs .tab-links a").click(function(e) {
     var currentAttrValue = jQuery(this).attr('href');
-    jQuery(currentAttrValue).css('display', 'block').siblings(".panel").css('display', 'none');
+    jQuery(currentAttrValue).css('visibility', 'visible').siblings(".panel").css('visibility', 'collapse');
     jQuery(this).parent('li').addClass('is-active').siblings().removeClass('is-active');
     e.preventDefault();
   });
