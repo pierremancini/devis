@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devis site web</title>
       <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css"/>
       <link rel="stylesheet" href="{% static 'devis_app/css/form.css' %}"/>
   </head>
   <body>
@@ -45,15 +46,15 @@
           </li>
         </ul>
       </div>
-      <form class="content" action="" method="post">
+      <form class="content" action="{% url 'devis:nouveau' %}" method="post">
         {% csrf_token %}
-        <table class="panel" id="form-emetteur" style="display:none">
+        <table class="panel" id="form-emetteur" style="visibility:collapse">
           {{ emetteur.as_table }}
         </table>
-        <table class="panel" id="form-client" style="display:none">
+        <table class="panel" id="form-client" style="visibility:collapse">
           {{ client.as_table }}
         </table>
-        <div class="panel" class="columns is-desktop" id="form-grille" style="display:block">
+        <div class="panel" class="columns is-desktop" id="form-grille" style="display:visible">
           <div class="column">
             {{ grille }}
           </div>
@@ -87,15 +88,15 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <th colspan="2"><button id="nouvelle-ligne" class="button is-text">Nouvelle ligne</button></th>
-                  <th colspan="2"><button id="supprimer-ligne" class="button is-text">Supprimer ligne</button></th>
+                  <th colspan="2"><div id="nouvelle-ligne" class="button is-text">Nouvelle ligne</div></th>
+                  <th colspan="2"><div id="supprimer-ligne" class="button is-text">Supprimer ligne</div></th>
                 </tr>
               </tfoot>
             </table>
           </div>
           <div class="subtitle" style="float: right; padding-right: 20px" >Total: <span id="total"></span><span class="devise-holder" style="display:inline"></span></div>
         </div>
-        <table class="panel" id="form-info-devis" style="display:none">
+        <table class="panel" id="form-info-devis" style="visibility:collapse">
           {{ devis.as_table }}
         </table>
         <input class="button" type="submit" value="Enregistrer">
@@ -104,5 +105,6 @@
     <script src="https://kit.fontawesome.com/86a11fcf22.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'devis_app/js/form.js' %}"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
   </body>
 </html>
