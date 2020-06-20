@@ -1,28 +1,32 @@
 function roundDecimal(x) {
   // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-  return Math.round((x + Number.EPSILON) * 100) / 100
+  return Math.round((x + Number.EPSILON) * 100) / 100;
 }
 
 // Calcul total
 function set_total() {
   total = 0;
   $(".sous-total").each(function() {
-    total += parseFloat($(this).text().replace(',','.'));
+    sous_total = parseFloat($(this).text().replace(',','.'));
+    if (!isNaN(sous_total)) {
+      total += sous_total;
+    }
   });
   total = roundDecimal(total);
   $("#total").text(total.toString().replace('.', ','));
   return $("#total");
 }
 
-function sous_total(index, element) {
-  var quantity_int = parseInt($( this ).find('.quantity').val());
-  var prix_float = parseFloat($( this ).find('.prix-unite').val().replace(',','.'));
-  var product = quantity_int * prix_float;
-  if (product !== NaN) {
-    var sous_total = roundDecimal(product).toString().replace('.', ',');
-    $( this ).find(".sous-total").text(sous_total);
-  }
-  return $( this ).find(".sous-total");
+function set_sous_total() {
+  $("#grille > tbody > tr").each(function() {
+    var quantity_int = parseInt($( this ).find('.quantity').val());
+    var prix_float = parseFloat($( this ).find('.prix-unite').val().replace(',','.'));
+    var product = quantity_int * prix_float;
+    if (product !== NaN) {
+      var sous_total = roundDecimal(product).toString().replace('.', ',');
+      $( this ).find(".sous-total").text(sous_total);
+    }
+  });
 }
 
 $(document).ready(function(){
@@ -33,11 +37,10 @@ $(document).ready(function(){
   $(".devise-holder").text(initDevise);
 
   // Set initial sous-total
-  $("#grille > tbody > tr").each(sous_total);
+  set_sous_total();
 
   // Set initial du total
   set_total();
-
 
   // --- Code gérant les évènements après chargement de la page
   $(".tabs .tab-links a").click(function(e) {
@@ -48,10 +51,12 @@ $(document).ready(function(){
   });
 
   $("#nouvelle-ligne").off().on('click', function(e) {
+
+    // Todo modifier ici, attention l'erreur de typage voir ligne 
     $("#grille tbody tr:last").after(
-      '<tr><td><input class="input is-small" type="text" value="">\
-      </td><td><input class="input is-small quantity" type="text" value="1">\
-      </td><td><input class="input is-small prix-unite" type="text" value="0,00"></td>\
+      '<tr><td><textarea class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>\
+      <td><input class="input is-small quantity" type="text" size="8" value=""></td>\
+      <td><input class="input is-small prix-unite" type="text" size="1" value=""></td>\
       <td class="sous-total"></td></tr>');
 
     // calcul du total
@@ -73,15 +78,14 @@ $(document).ready(function(){
 
   // calcul des sous-totaux et du total
   $("#grille").on("input", ".prix-unite",  function(e) {
-
     // Empêche la saisi au-delà des décimales
     this.value = this.value.match(/^\d+,?\d{0,2}/);
-
     // calcul d'un sous-total
-    $("#grille > tbody > tr").each(sous_total);
 
+    set_sous_total();
+    // $("#grille > tbody > tr").each(sous_total);
     // set du sous-total
-    // td_parent.siblings(".sous-total").text(sous_total_v);
+
 
     // calcul du total
     set_total();
@@ -93,7 +97,8 @@ $(document).ready(function(){
     this.value = this.value.match(/^\d+/);
 
     // scalcul d'un sous-total
-    $("#grille > tbody > tr").each(sous_total);
+    set_sous_total();
+    // $("#grille > tbody > tr").each(sous_total);
 
     // calcul du total
     set_total();
