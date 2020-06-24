@@ -5,12 +5,12 @@ from .models import Devis, Emeteur, Client, GrillePrix
 class DevisForm(forms.ModelForm):
     class Meta:
         model = Devis
-        fields = ['titre', 'date_creation', 'date_emission']
+        fields = ['titre', 'date_creation', 'date_emission', 'num_emission']
 
 class EmetteurForm(forms.ModelForm):
     class Meta:
         model = Emeteur
-        fields = ['nom', 'adresse', 'email', 'telephone', 'fax', 'SIRET', 'code_APE']
+        fields = '__all__'
 
 class ClientForm(forms.ModelForm):
     class Meta:
