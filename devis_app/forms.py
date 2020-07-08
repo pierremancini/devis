@@ -1,8 +1,11 @@
 from django import forms
 
 from .models import Devis, Emeteur, Client, GrillePrix
+from django.conf import settings
 
 class DevisForm(forms.ModelForm):
+    date_creation = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
+    date_emission = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
     class Meta:
         model = Devis
         fields = ['titre', 'date_creation', 'date_emission', 'num_emission', 'mention_total', 'mention']

@@ -6,11 +6,11 @@ class GrillePrix(models.Model):
 class Emeteur(models.Model):
     nom = models.CharField(max_length=500)
     adresse = models.TextField(blank=True)
-    email = models.CharField(max_length=200,  blank=True)
-    telephone = models.CharField(max_length=200,  blank=True)
+    email = models.CharField(max_length=200, blank=True)
+    telephone = models.CharField(max_length=200, blank=True)
     fax = models.CharField(max_length=200, blank=True)
-    SIRET = models.CharField(max_length=200,  blank=True)
-    code_APE = models.CharField(max_length=200,  blank=True)
+    SIRET = models.CharField(max_length=200, blank=True)
+    code_APE = models.CharField(max_length=200, blank=True)
     image_signature = models.ImageField(blank=True)
 
     def __str__(self):
@@ -32,8 +32,8 @@ class Devis(models.Model):
     grille_prix = models.ForeignKey(GrillePrix, on_delete=models.CASCADE)
     emeteur = models.ForeignKey(Emeteur, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True)
-    date_creation = models.DateField('date creation', blank=True, null=True)
-    date_emission = models.DateField('date emission', blank=True, null=True)
+    date_creation = models.CharField(max_length=10, blank=True, null=True)
+    date_emission = models.CharField(max_length=10, blank=True, null=True)
     num_emission = models.PositiveSmallIntegerField(blank=True, null=True)
     # Text supplémentaire dans l'encadrer à gauche de l'affichage du prix total
     mention_total = models.CharField(max_length=100, blank=True, null=True)
