@@ -12,7 +12,7 @@ function set_total() {
       total += sous_total;
     }
   });
-  total = roundDecimal(total);
+  total = roundDecimal(total).toFixed(2);
   $("#total").text(total.toString().replace('.', ','));
   return $("#total");
 }
@@ -23,10 +23,14 @@ function set_sous_total() {
     var prix_float = parseFloat($( this ).find('.prix-unite').val().replace(',','.'));
     var product = quantity_int * prix_float;
     if (product !== NaN) {
-      var sous_total = roundDecimal(product).toString().replace('.', ',');
+      var sous_total = roundDecimal(product).toFixed(2).toString().replace('.', ',');
       $( this ).find(".sous-total").text(sous_total);
     }
   });
+}
+
+function next_tr_num() {
+  return $("#grille tbody tr").length + 1
 }
 
 $(document).ready(function(){
@@ -52,12 +56,13 @@ $(document).ready(function(){
 
   $("#nouvelle-ligne").off().on('click', function(e) {
 
-    // Todo modifier ici, attention l'erreur de typage voir ligne 
-    $("#grille tbody tr:last").after(
-      '<tr><td><textarea class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>\
-      <td><input class="input is-small quantity" type="text" size="8" value=""></td>\
-      <td><input class="input is-small prix-unite" type="text" size="1" value=""></td>\
-      <td class="sous-total"></td></tr>');
+    tr_num = next_tr_num();
+    textarea = '<tr><td><textarea name="l'+tr_num+'_designation" class="textarea is-small" cols="40" rows="2" type="text"></textarea></td>';
+    td_quantity =  '<td><input name="l'+tr_num+'_quantity" class="input is-small quantity" type="text" size="8" value=""></td>';
+    td_prix_unite = '<td><input name="l'+tr_num+'_prix-unite" class="input is-small prix-unite" type="text" size="1" value=""></td>';
+    td_sous_total = '<td class="sous-total"></td>';
+    html_tr = textarea + td_quantity + td_prix_unite + td_sous_total
+    $("#grille tbody tr:last").after(html_tr);
 
     // calcul du total
     set_total();
