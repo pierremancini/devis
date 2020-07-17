@@ -19,7 +19,8 @@ urlpatterns = [
     path('creer_devis/', views.new_devis, name="new_devis"),
     path('creer_emetteur/', views.new_emetteur, name="new_emetteur"),
     # ex: /devis/5/modifier/
-    path('<int:devis_id>/modifier/', views.modifier, name="modifier")
+    path('<int:devis_id>/modifier/', views.modifier, name="modifier"),
+    path('<int:devis_id>/delete/', views.delete, name='delete')
     # Vues génériques
     # path('nouveau/', views.DevisCreate.as_view(), name='devis-add'),
 ]

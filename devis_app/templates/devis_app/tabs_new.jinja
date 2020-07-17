@@ -32,7 +32,7 @@
               <span>Client</span>
             </a>
           </li>
-          <li class="is-active">
+          <li  class="is-active">
             <a href="#form-grille">
               <span class="icon is-small"><i class="fas fa-euro-sign"></i></i></span>
               <span>Grille de prix</span>
@@ -54,9 +54,9 @@
         <table class="panel" id="form-client" style="visibility:collapse">
           {{ client.as_table }}
         </table>
-        <div class="panel" class="columns is-desktop" id="form-grille" style="display:visible">
+        <div class="panel" class="columns is-desktop" id="form-grille" style="visibility:visible">
           <div class="column">
-            {{ grille }}
+            {{ grille.as_table }}
           </div>
           <div class="column">
             <table id="grille">
@@ -69,22 +69,35 @@
                 </tr>
               </thead>
               <tbody>
+                {% if lines %}
+                  {% for line in lines %}
+                    {{ line }}
+                  <tr>
+                    {# Ligne par défaut à ajouter quand on click sur bouton "nouvell-ligne" #}
+                    {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
+                    <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">{{ line.designation }}</textarea></td>
+                    <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="{{ line.quantité }}"></td>
+                    <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="{{ line.prix_unit }}"></td>
+                    <td class="sous-total"></td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
                 <tr>
                   {# Ligne par défaut à ajouter quand on click sur bouton "nouvell-ligne" #}
                   {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
-                  <td><textarea class="textarea is-small" cols="40" rows="2" type="text">toto au chateau</textarea></td>
-                  <td><input class="input is-small quantity" type="text" size="8" value="2"></td>
-                  <td><input class="input is-small prix-unite" type="text" size="1" value="5,90"></td>
+                  <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">toto au chateau</textarea></td>
+                  <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="2"></td>
+                  <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="5,90"></td>
                   <td class="sous-total"></td>
                 </tr>
                 <tr>
                   {# Test: ligne de test #}
-                  {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
-                  <td><textarea class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>
-                  <td><input class="input is-small quantity" type="text" size="8" value="4"></td>
-                  <td><input class="input is-small prix-unite" type="text" size="1" value="6,90"></td>
+                  <td><textarea name="l2_designation" class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>
+                  <td><input name="l2_quantity" class="input is-small quantity" type="text" size="8" value="4"></td>
+                  <td><input name="l2_prix-unite" class="input is-small prix-unite" type="text" size="1" value="6,90"></td>
                   <td class="sous-total"></td>
                 </tr>
+                {% endif %}
               </tbody>
               <tfoot>
                 <tr>
@@ -97,7 +110,7 @@
           <div class="subtitle" style="float: right; padding-right: 20px" >Total: <span id="total"></span><span class="devise-holder" style="display:inline"></span></div>
         </div>
         <table class="panel" id="form-info-devis" style="visibility:collapse">
-          {{ devis.as_table }}
+          {{ devis }}
         </table>
         <input class="button" type="submit" value="Enregistrer">
       </form>
