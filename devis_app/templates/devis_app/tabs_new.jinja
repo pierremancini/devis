@@ -72,8 +72,6 @@
                 {% if lines %}
                   {% for line in lines %}
                   <tr>
-                    {# Ligne par défaut à ajouter quand on click sur bouton "nouvell-ligne" #}
-                    {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
                     <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">{{ line.designation }}</textarea></td>
                     <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="{{ line.quantité }}"></td>
                     <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="{{ line.prix_unit }}"></td>
