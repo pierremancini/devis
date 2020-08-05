@@ -4,7 +4,7 @@ from .models import Devis, Emeteur, Client, GrillePrix
 from django.conf import settings
 
 class DevisForm(forms.ModelForm):
-    date_creation = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
+    date_creation = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=True)
     date_emission = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
     class Meta:
         model = Devis

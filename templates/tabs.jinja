@@ -1,0 +1,123 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis site web</title>
+      <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css"/>
+      <link rel="stylesheet" href="{% static 'devis_app/css/form.css' %}"/>
+  </head>
+  <body>
+    <div class="has-text-centered is-centered">
+      <h2 class="subtitle devis">Création d'un nouveau devis</h2>
+      <div class="tabs is-centered is-boxed is-medium">
+        <ul class="tab-links">
+          <li>
+            <a href="#form-emetteur">
+              <span class="icon is-small">
+                <i class="fas fa-arrow-left"></i><i class="fas fa-user"></i>
+              </span>
+              <span>Emetteur</span>
+            </a>
+          </li>
+          <li>
+            <a href="#form-client">
+              <span class="icon is-small">
+                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-user"></i>
+              </span>
+              <span>Client</span>
+            </a>
+          </li>
+          <li  class="is-active">
+            <a href="#form-grille">
+              <span class="icon is-small"><i class="fas fa-euro-sign"></i></i></span>
+              <span>Grille de prix</span>
+            </a>
+          </li>
+          <li>
+            <a href="#form-info-devis">
+              <span class="icon is-small"><i class="far fa-file-alt"></i></span>
+              <span>Info devis</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% block destination_form %}
+        {# Override this in templates#}
+      {% endblock %}
+      
+        {% csrf_token %}
+        <table class="panel" id="form-emetteur" style="visibility:collapse">
+          {{ emetteur.as_table }}
+        </table>
+        <table class="panel" id="form-client" style="visibility:collapse">
+          {{ client.as_table }}
+        </table>
+        <div class="panel" class="columns is-desktop" id="form-grille" style="visibility:visible">
+          <div class="column">
+            {{ grille.as_table }}
+          </div>
+          <div class="column">
+            <table id="grille">
+              <thead>
+                <tr>
+                  <th>Désignation</th>
+                  <th>Quantité</th>
+                  <th>Prix unitaire <div class="devise-holder" style="display:inline"></div> (HT)</th>
+                  <th>Montant <div class="devise-holder" style="display:inline"></div> (HT)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if lines %}
+                  {% for line in lines %}
+                  <tr>
+                    <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">{{ line.designation }}</textarea></td>
+                    <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="{{ line.quantité }}"></td>
+                    <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="{{ line.prix_unit }}"></td>
+                    <td class="sous-total"></td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                <tr>
+                  {# Ligne par défaut à ajouter quand on click sur bouton "nouvell-ligne" #}
+                  {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
+                  <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">toto au chateau</textarea></td>
+                  <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="2"></td>
+                  <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="5,90"></td>
+                  <td class="sous-total"></td>
+                </tr>
+                <tr>
+                  {# Test: ligne de test #}
+                  <td><textarea name="l2_designation" class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>
+                  <td><input name="l2_quantity" class="input is-small quantity" type="text" size="8" value="4"></td>
+                  <td><input name="l2_prix-unite" class="input is-small prix-unite" type="text" size="1" value="6,90"></td>
+                  <td class="sous-total"></td>
+                </tr>
+                {% endif %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="2"><div id="nouvelle-ligne" class="button is-text">Nouvelle ligne</div></th>
+                  <th colspan="2"><div id="supprimer-ligne" class="button is-text">Supprimer ligne</div></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="subtitle" style="float: right; padding-right: 20px" >Total: <span id="total"></span><span class="devise-holder" style="display:inline"></span></div>
+        </div>
+        <table class="panel" id="form-info-devis" style="visibility:collapse">
+          {{ devis }}
+        </table>
+        <input class="button" type="submit" value="Enregistrer">
+      </form>
+    </div>
+    <script src="https://kit.fontawesome.com/86a11fcf22.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'devis_app/js/form.js' %}"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+  </body>
+</html>

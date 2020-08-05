@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from datetime import date
 
 class GrillePrix(models.Model):
     devise = models.CharField(max_length=200)
@@ -32,20 +34,20 @@ class Devis(models.Model):
     grille_prix = models.ForeignKey(GrillePrix, on_delete=models.CASCADE)
     emeteur = models.ForeignKey(Emeteur, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True)
-    date_creation = models.CharField(max_length=10, blank=True, null=True)
-    date_emission = models.CharField(max_length=10, blank=True, null=True)
-    num_emission = models.PositiveSmallIntegerField(blank=True, null=True)
+    date_creation = models.DateField(settings.DATE_INPUT_FORMATS, blank= True, null=True, default=date.today)
+    date_emission = models.DateField(settings.DATE_INPUT_FORMATS, blank=True, null=True)
+    num_emission = models.SmallIntegerField(blank=True, null=False, default=0)
     # Text supplémentaire dans l'encadrer à gauche de l'affichage du prix total
     mention_total = models.CharField(max_length=100, blank=True, null=True)
     # Text juste avant la partie réservée à la signature
     mention = models.TextField(blank=True, null=True)
 
-    def get_absolute_url(self):
-        return reverse('devis:detail', args=[self.id])
+    # def get_absolute_url(self):
+    #     return reverse('devis:detail', args=[self.id])
 
 
-    def __str__(self):
-        return self.title + " n°id " + self.id
+    # def __str__(self):
+    #     return self.titre + " n°id " + self.id
 
 
 class LignePrix(models.Model):
