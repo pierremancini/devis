@@ -34,7 +34,7 @@ class Devis(models.Model):
     grille_prix = models.ForeignKey(GrillePrix, on_delete=models.CASCADE)
     emeteur = models.ForeignKey(Emeteur, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True)
-    date_creation = models.DateField(settings.DATE_INPUT_FORMATS, blank= True, null=True, default=date.today)
+    date_creation = models.DateField(settings.DATE_INPUT_FORMATS, blank= True, null=True)
     date_emission = models.DateField(settings.DATE_INPUT_FORMATS, blank=True, null=True)
     num_emission = models.SmallIntegerField(blank=True, null=False, default=0)
     # Text supplémentaire dans l'encadrer à gauche de l'affichage du prix total
