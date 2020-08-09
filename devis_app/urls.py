@@ -7,7 +7,7 @@ from . import views
 app_name = 'devis'
 urlpatterns = [
     # test
-    path('list/', views.DevisList.as_view(), name='devis_list'),
+    path('list_emetteur_client/', views.list_emetteur_client, name='list_emetteur_client'),
     # exemple: /devis/ 
     path('', views.index, name='index'),
     # exemple: /devis/5/
@@ -21,7 +21,9 @@ urlpatterns = [
     path('creer_client/', views.new_client, name="new_client"),
     # ex: /devis/5/modifier/
     path('<int:devis_id>/modifier/', views.modifier, name="modifier"),
-    path('<int:devis_id>/delete/', views.delete, name='delete')
+    path('<int:devis_id>/delete/', views.delete, name='delete'),
+    path('<int:emetteur_id>/delete_emetteur/', views.delete_emetteur, name='delete_emetteur'),
+    path('<int:client_id>/delete_client/', views.delete_client, name='delete_client')
     # Vues génériques
     # path('nouveau/', views.DevisCreate.as_view(), name='devis-add'),
 ]

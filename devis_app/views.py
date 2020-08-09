@@ -24,6 +24,13 @@ def index(request):
     return render(request, 'devis_app/index.html', {'dernier_crees': dernier_crees,
         'dernier_emis': dernier_emis})
 
+def list_emetteur_client(request):    
+    emetteurs = Emeteur.objects.all()
+    clients = Client.objects.all()
+
+    return render(request, 'devis_app/list.jinja', {'emetteurs': emetteurs,
+        'clients': clients})
+
 def detail(request, devis_id):
     try:
         devis = Devis.objects.get(pk=devis_id)
@@ -393,3 +400,12 @@ def delete(request, devis_id):
     devis.delete()
     return redirect('/devis')
 
+def delete_emetteur(request, emetteur_id):
+    emetteur = Emeteur.objects.get(pk=emetteur_id)
+    emetteur.delete()
+    return redirect('/devis/list_emetteur_client/')
+
+def delete_client(request, client_id):
+    client = Client.objects.get(pk=client_id)
+    client.delete()
+    return redirect('/devis/list_emetteur_client/')

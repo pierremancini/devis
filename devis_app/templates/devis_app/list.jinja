@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
+    <link rel="stylesheet" href=""/>
+  </head>
+  <body>
+    <h1 class="has-text-centered title">Liste des émetteurs et clients</h1>
+    <div class="columns has-text-centered">
+      <div class="column">
+        <h2 class="has-text-centered subtitle">Emetteurs créés</h2>
+        {% if emetteurs %}
+        <ul>
+          {% for emetteur in emetteurs %}
+          <li>
+            <span>{{emetteur.nom}} - id {{emetteur.id}}</span> ---
+            <a href="{% url 'devis:delete_emetteur' emetteur.id %}"><i class="fas fa-trash-alt"></i></a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+          <p>Aucun emetteur créé</p>
+        {% endif %}
+      </div>
+      <div class="column">
+        <h2 class="has-text-centered subtitle">Client créés</h2>
+        {% if clients %}
+        <ul>
+          {% for client in clients %}
+          <li>
+            <span>{{client.nom}} - id {{client.id}}</span> ---
+            <a href="{% url 'devis:delete_client' client.id %}"><i class="fas fa-trash-alt"></i></a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+          <p>Aucun client créé</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="has-text-centered">
+      <a class="button" href="{% url 'devis:index'%}">Retour index</a>
+    </div>
+    <script src="https://kit.fontawesome.com/86a11fcf22.js" crossorigin="anonymous"></script>
+  </body>
+</html>
