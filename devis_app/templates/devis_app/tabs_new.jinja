@@ -4,3 +4,15 @@
 {% block destination_form %}
   <form class="content" action="{% url 'devis:nouveau' %}" method="post">
 {% endblock %}
+
+
+{% block emetteur_client %}
+  <table>
+    <h2>Emetteur</h2>
+    {{ emetteur.form.as_table }}
+  </table>
+  <table>
+    <h2>Client</h2>
+    {{ client.as_table }}
+  </table>
+{% endblock %}

@@ -16,20 +16,11 @@
       <div class="tabs is-centered is-boxed is-medium">
         <ul class="tab-links">
           <li>
-            <a href="#form-emetteur">
+            <a href="#form-emetteur-client">
               <span class="icon is-small">
-                <i class="fas fa-arrow-left"></i><i class="fas fa-user"></i>
-              </span>
-              <span>Emetteur</span>
-            </a>
-          </li>
-          <li>
-            <a href="#form-client">
-              <span class="icon is-small">
-                <i class="fas fa-arrow-right"></i>
                 <i class="fas fa-user"></i>
               </span>
-              <span>Client</span>
+              <span> Client & Emetteur </span>
             </a>
           </li>
           <li  class="is-active">
@@ -51,12 +42,11 @@
       {% endblock %}
       
         {% csrf_token %}
-        <table class="panel" id="form-emetteur" style="visibility:collapse">
-          {{ emetteur.as_table }}
-        </table>
-        <table class="panel" id="form-client" style="visibility:collapse">
-          {{ client.as_table }}
-        </table>
+        <div class="panel" id="form-emetteur-client" style="visibility:collapse">
+        {% block emetteur_client %}
+          {# Override this in templates#}
+        {% endblock %}
+        </div>
         <div class="panel" class="columns is-desktop" id="form-grille" style="visibility:visible">
           <div class="column">
             {{ grille.as_table }}

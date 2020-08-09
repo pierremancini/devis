@@ -4,3 +4,7 @@
 {% block destination_form %}
   <form class="content" action="." method="post">
 {% endblock %}
+
+{% block emetteur_client %}
+  {{ form_fk.as_table }}
+{% endblock %}

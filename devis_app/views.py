@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .models import Devis, Emeteur, Client, GrillePrix, LignePrix
 from .forms import DevisForm, EmetteurForm, ClientForm, GrillePrixForm
+from django.forms import modelformset_factory
 
 from pprint import pprint
 import re
@@ -139,6 +140,7 @@ def new(request):
             )
 
             ligne_prix.save()
+        return HttpResponseRedirect(reverse('devis:index'))
 
     return render(request, 'devis_app/tabs_new.jinja', 
         {'devis': form_devis, 
@@ -148,11 +150,85 @@ def new(request):
 
 def new_devis(request):
     if request.method == 'GET':
-        form = DevisForm()
+        form_devis = DevisForm()
+        form_emetteur = EmetteurForm()
+        form_client = ClientForm()
+        form_grille = GrillePrixForm()
+        form_set_fk = modelformset_factory(Devis, fields=('emeteur', 'client'))
+
+        form_fk = form_set_fk.form
+
     elif request.method == 'POST':
-        form = DevisForm(request.POST)
-        new_devis = ''
-    return render(request, 'devis_app/new_object.jinja', {'view': form, 'type': 'Devis'})
+        form_devis = DevisForm(request.POST)
+        form_grille = GrillePrixForm(request.POST)
+        form_set_fk = modelformset_factory(Devis, fields=('emeteur', 'client'))
+
+        form_fk = form_set_fk(initial=[{'emeteur': request.POST['emeteur']},
+                                   {'client': request.POST['client']}]).forms[0]
+
+        client = Client.objects.get(pk=request.POST['client'])
+
+        emetteur = Emeteur.objects.get(pk=request.POST['emeteur'])
+
+
+        new_grille = GrillePrix(
+            devise = request.POST['devise']
+        )
+
+        new_grille.save()
+
+        if request.POST['date_creation']:
+            date_creation = datetime.strptime(request.POST['date_creation'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        else:
+            date_creation = None
+
+        if  request.POST['date_emission']:
+            date_emission = atetime.strptime(request.POST['date_emission'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        else:
+            date_emission = None
+
+        new_devis = Devis(
+            titre = request.POST['titre'],
+            emeteur = emetteur,
+            client = client,
+            grille_prix = new_grille,
+            date_creation = date_creation,
+            date_emission = date_emission,
+            num_emission = request.POST['num_emission'],
+            mention_total = request.POST['mention_total'],
+            mention = request.POST['mention'])
+
+        new_devis.save()
+
+        # Instanciation des objects ligne
+        lines = {}
+        for i in request.POST:
+            if re.match('^(l\d+)_(.*)$', i):
+                m = re.match('^l(\d+)_(.*)$', i)
+                line_num = m.group(1)
+                lines.setdefault(line_num, {})
+                field = m.group(2)
+                if field == 'designation':
+                    lines[line_num]['designation'] = request.POST[i]
+                elif field == 'quantity':
+                    lines[line_num]['quantity'] = request.POST[i]
+                elif field == 'prix-unite':
+                    lines[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
+
+        for n in lines:
+            ligne_prix = LignePrix(
+                grille_prix = new_grille,
+                designation = lines[n]['designation'],
+                quantité = lines[n]['quantity'],
+                prix_unit = lines[n]['prix-unite']
+            )
+
+            ligne_prix.save()
+        return HttpResponseRedirect(reverse('devis:index'))
+    return render(request, 'devis_app/new_devis.jinja',
+        {'devis': form_devis,
+        'grille': form_grille,
+        'form_fk': form_fk})
 
 def new_emetteur(request):
     if request.method == 'GET':
@@ -160,13 +236,14 @@ def new_emetteur(request):
     elif request.method == 'POST':
         form = EmetteurForm(request.POST)
         new_emetteur = Emeteur(
-            nom = request.POST['nom'],
-            adresse = request.POST['adresse'],
-            email = request.POST['email'],
-            telephone = request.POST['telephone'],
-            fax = request.POST['fax'],
+            nom = request.POST['nom_emetteur'],
+            adresse = request.POST['adresse_emetteur'],
+            email = request.POST['email_emetteur'],
+            telephone = request.POST['telephone_emetteur'],
+            fax = request.POST['fax_emetteur'],
             SIRET = request.POST['SIRET'],
-            code_APE = request.POST['code_APE']
+            code_APE = request.POST['code_APE'],
+            image_signature = request.POST['image_signature']
         )
         new_emetteur.save()
         return HttpResponseRedirect(reverse('devis:index'))
@@ -177,10 +254,43 @@ def new_client(request):
         form = ClientForm()
     elif request.method == 'POST':
         form = ClientForm(request.POST)
-        new_emetteur = ''
+        new_client = Client(
+            nom = request.POST['nom_client'],
+            adresse = request.POST['adresse_client'],
+            email = request.POST['email_client'],
+            telephone = request.POST['telephone_client'],
+            fax = request.POST['fax_client']
+        )
+        new_client.save()
+        return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/new_object.jinja', {'view': form, 'type': 'Client'})
 
 def modifier(request, devis_id):
+    if request.method == 'GET':
+        devis = Devis.objects.get(pk=devis_id)
+
+        # Récupérer les objects liés à devis
+        form_devis = DevisForm(instance=devis)
+        form_grille = GrillePrixForm(instance=devis.grille_prix)
+        form_set_fk = modelformset_factory(Devis, fields=('emeteur', 'client'))
+
+        form_fk = form_set_fk(initial=[{'emeteur': devis.emeteur.id},
+                                       {'client': devis.client.id}]).forms[0]
+
+        lines = devis.grille_prix.ligneprix_set.all()
+
+    elif request.method == 'POST':
+        pass
+
+    return render(request, 'devis_app/modifier.jinja', 
+        {'form_fk': form_fk,
+        'devis': form_devis,
+        'grille': form_grille,
+        'lines': lines})
+
+
+
+def modifier_tout(request, devis_id):
     if request.method == 'GET':
         devis = Devis.objects.get(pk=devis_id)
 
@@ -270,8 +380,6 @@ def modifier(request, devis_id):
 
             ligne_prix.save()
 
-
-
     return render(request, 'devis_app/modifier.jinja', 
         {'devis': form_devis, 
         'emetteur': form_emetteur,
@@ -285,6 +393,3 @@ def delete(request, devis_id):
     devis.delete()
     return redirect('/devis')
 
-# ------ Test des vues génériques ---------
-class DevisList(ListView):
-    model = Devis

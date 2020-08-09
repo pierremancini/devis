@@ -11,12 +11,18 @@
   <body>
     <h1 class="has-text-centered title">Devis</h1></br>
     <div class="has-text-centered">
-      <a class="button" href="{% url 'devis:nouveau'%}">Nouveau</a>
+      <a class="button" href="{% url 'devis:new_emetteur'%}">Nouveau Emetteur</a>
+      <a class="button" href="{% url 'devis:new_client'%}">Nouveau Client</a>
+      <a class="button" href="{% url 'devis:new_devis'%}">Nouveau Devis</a>
     </div>
     </br>
+    <div class="has-text-centered">
+      <h2>Liste des Emetteur et Client:</h2>
+      <a class="button" href="{% url 'devis:list_emetteur_client'%}">Emetteur et Client</a>
+    </div>
     <div class="columns has-text-centered">
       <div class="column">
-        <h2 class="has-text-centered subtitle">Créés</h2>
+        <h2 class="has-text-centered subtitle">Devis créés</h2>
         {% if dernier_crees %}
         <ul>
           {% for devis_cree in dernier_crees %}

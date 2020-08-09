@@ -18,6 +18,7 @@ urlpatterns = [
     path('nouveau/', views.new, name="nouveau"),
     path('creer_devis/', views.new_devis, name="new_devis"),
     path('creer_emetteur/', views.new_emetteur, name="new_emetteur"),
+    path('creer_client/', views.new_client, name="new_client"),
     # ex: /devis/5/modifier/
     path('<int:devis_id>/modifier/', views.modifier, name="modifier"),
     path('<int:devis_id>/delete/', views.delete, name='delete')
