@@ -58,7 +58,7 @@ $(document).ready(function(){
 
     tr_num = next_tr_num();
     textarea = '<tr><td><textarea name="l'+tr_num+'_designation" class="textarea is-small" cols="40" rows="2" type="text"></textarea></td>';
-    td_quantity =  '<td><input name="l'+tr_num+'_quantity" class="input is-small quantity" type="text" size="8" value=""></td>';
+    td_quantity =  '<td><input name="l'+tr_num+'_quantity" class="input is-small quantity" type="text" size="8" value="1"></td>';
     td_prix_unite = '<td><input name="l'+tr_num+'_prix-unite" class="input is-small prix-unite" type="text" size="1" value=""></td>';
     td_sous_total = '<td class="sous-total"></td>';
     html_tr = textarea + td_quantity + td_prix_unite + td_sous_total
