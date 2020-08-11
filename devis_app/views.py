@@ -119,8 +119,6 @@ def new(request):
             mention_total = request.POST['mention_total'],
             mention = request.POST['mention'])
 
-        pprint(new_devis)
-
         new_devis.save()
 
         # Instanciation des objects ligne
@@ -190,7 +188,7 @@ def new_devis(request):
             date_creation = None
 
         if  request.POST['date_emission']:
-            date_emission = atetime.strptime(request.POST['date_emission'], '%d/%m/%Y').strftime('%Y-%m-%d')
+            date_emission = datetime.strptime(request.POST['date_emission'], '%d/%m/%Y').strftime('%Y-%m-%d')
         else:
             date_emission = None
 
@@ -287,14 +285,65 @@ def modifier(request, devis_id):
         lines = devis.grille_prix.ligneprix_set.all()
 
     elif request.method == 'POST':
-        pass
+        devis = Devis.objects.get(pk=devis_id)
+
+        # Récupérer les objects liés à devis
+        form_devis = DevisForm(instance=devis)
+        form_grille = GrillePrixForm(instance=devis.grille_prix)
+
+        form_fk = form_set_fk(initial=[{'emeteur': devis.emeteur.id},
+                                       {'client': devis.client.id}]).forms[0]
+
+        lines = devis.grille_prix.ligneprix_set.all()
+
+        client.save()
+        emetteur.save()
+        grille.save()
+
+        devis = Devis(
+            titre = request.POST['titre'],
+            emeteur = emetteur,
+            client = client,
+            grille_prix = grille,
+            date_creation = request.POST['date_creation'],
+            date_emission = request.POST['date_emission'],
+            num_emission = request.POST['num_emission'],
+            mention_total = request.POST['mention_total'],
+            mention = request.POST['mention'])
+
+        devis.save()
+
+        # Instanciation des objects ligne
+        lines = {}
+        for i in request.POST:
+            if re.match('^(l\d+)_(.*)$', i):
+                m = re.match('^l(\d+)_(.*)$', i)
+                line_num = m.group(1)
+                lines.setdefault(line_num, {})
+                field = m.group(2)
+                if field == 'designation':
+                    lines[line_num]['designation'] = request.POST[i]
+                elif field == 'quantity':
+                    lines[line_num]['quantity'] = request.POST[i]
+                elif field == 'prix-unite':
+                    lines[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
+
+        # A changer, on doit modifier certaines lignes au lieu d'instancier de nouveaux objets
+        for n in lines:
+            ligne_prix = LignePrix(
+                grille_prix = new_grille,
+                designation = lines[n]['designation'],
+                quantité = lines[n]['quantity'],
+                prix_unit = lines[n]['prix-unite']
+            )
+
+            ligne_prix.save()
 
     return render(request, 'devis_app/modifier.jinja', 
         {'form_fk': form_fk,
         'devis': form_devis,
         'grille': form_grille,
         'lines': lines})
-
 
 
 def modifier_tout(request, devis_id):
@@ -321,6 +370,7 @@ def modifier_tout(request, devis_id):
 
         lines = devis.grille_prix.ligneprix_set.all()
 
+        # TODO: Ne pas réinstancier un client et un emetteur à chaque modifications
         client = Client(
             nom = request.POST['nom_client'],
             adresse = request.POST['adresse_client'],
