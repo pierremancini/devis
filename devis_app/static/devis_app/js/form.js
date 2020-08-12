@@ -111,7 +111,5 @@ $(document).ready(function(){
 
   $("#id_date_creation").datepicker();
   $("#id_date_emission").datepicker();
-  $("#id_date_creation").datepicker("option", "dateFormat", 'dd/mm/yy');
-  $("#id_date_emission").datepicker("option", "dateFormat", 'dd/mm/yy');
 });
 
