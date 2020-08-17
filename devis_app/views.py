@@ -183,15 +183,15 @@ def new_devis(request):
         new_grille.save()
 
         if request.POST['date_creation']:
-            date_creation = datetime.strptime(request.POST['date_creation'], '%d/%m/%Y').strftime('%Y-%m-%d')
+            date_creation = request.POST['date_creation']
         else:
             date_creation = None
 
-        if  request.POST['date_emission']:
-            date_emission = datetime.strptime(request.POST['date_emission'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        if request.POST['date_emission']:
+            date_emission = request.POST['date_emission']
         else:
             date_emission = None
-
+       
         new_devis = Devis(
             titre = request.POST['titre'],
             emeteur = emetteur,

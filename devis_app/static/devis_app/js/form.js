@@ -109,7 +109,7 @@ $(document).ready(function(){
     set_total();
   });
 
-  $("#id_date_creation").datepicker();
-  $("#id_date_emission").datepicker();
+  $("#id_date_creation").datepicker({ dateFormat: 'yy-mm-dd' });
+  $("#id_date_emission").datepicker({ dateFormat: 'yy-mm-dd' });
 });
 
