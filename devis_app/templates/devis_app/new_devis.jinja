@@ -1,5 +1,8 @@
 {% extends "devis_app/tabs.jinja" %}
 
+{% block titre %}
+  <h2 class="subtitle devis">Création d'un nouveau devis</h2>
+{% endblock %}
 
 {% block destination_form %}
   <form class="content" action="{% url 'devis:new_devis' %}" method="post">

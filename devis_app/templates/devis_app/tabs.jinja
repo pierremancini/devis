@@ -12,7 +12,9 @@
   </head>
   <body>
     <div class="has-text-centered is-centered">
-      <h2 class="subtitle devis">Création d'un nouveau devis</h2>
+      {% block titre %}
+        {# Override this in templates#}
+      {% endblock %}
       <div class="tabs is-centered is-boxed is-medium">
         <ul class="tab-links">
           <li>

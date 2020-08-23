@@ -368,7 +368,8 @@ def modifier(request, devis_id):
         {'form_fk': form_fk,
         'devis': form_devis,
         'grille': form_grille,
-        'lines': line_objects})
+        'lines': line_objects,
+        'devis_id': devis_id})
 
 
 def modifier_tout(request, devis_id):
