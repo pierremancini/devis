@@ -284,9 +284,7 @@ def modifier(request, devis_id):
                                        {'client': devis.client.id}]).forms[0]
 
         line_objects =  list(devis.grille_prix.ligneprix_set.all())
-        print("if")
     elif request.method == 'POST':
-        print('else')
         devis = Devis.objects.get(id=devis_id)
 
         # Récupérer les objects liés à devis
