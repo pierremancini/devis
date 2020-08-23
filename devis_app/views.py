@@ -288,7 +288,7 @@ def modifier(request, devis_id):
         devis = Devis.objects.get(id=devis_id)
 
         # Récupérer les objects liés à devis
-        form_devis = DevisForm(instance=devis)
+
         form_grille = GrillePrixForm(instance=devis.grille_prix)
         form_set_fk = modelformset_factory(Devis, fields=('emeteur', 'client'))
 
@@ -302,8 +302,6 @@ def modifier(request, devis_id):
        
         # Attention variable écrasée plus bas
         line_objects = list(devis.grille_prix.ligneprix_set.all())
-
-        # print(vars(line_objects[2]))
 
         if request.POST['date_creation']:
             date_creation = request.POST['date_creation']
@@ -326,6 +324,7 @@ def modifier(request, devis_id):
         devis.mention = request.POST['mention']
 
         devis.save()
+        form_devis = DevisForm(instance=devis)
 
         # Instanciation des objects ligne
         lines_form = {}
