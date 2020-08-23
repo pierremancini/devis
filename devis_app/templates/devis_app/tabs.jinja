@@ -65,9 +65,9 @@
                 {% if lines %}
                   {% for line in lines %}
                   <tr>
-                    <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">{{ line.designation }}</textarea></td>
-                    <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="{{ line.quantité }}"></td>
-                    <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="{{ line.prix_unit }}"></td>
+                    <td><textarea name="l{{line.numero}}_designation" class="textarea is-small" cols="40" rows="2" type="text">{{ line.designation }}</textarea></td>
+                    <td><input name="l{{line.numero}}_quantity" class="input is-small quantity" type="text" size="8" value="{{ line.quantité }}"></td>
+                    <td><input name="l{{line.numero}}_prix-unite" class="input is-small prix-unite" type="text" size="1" value="{{ line.prix_unit }}"></td>
                     <td class="sous-total"></td>
                   </tr>
                   {% endfor %}
@@ -75,16 +75,9 @@
                 <tr>
                   {# Ligne par défaut à ajouter quand on click sur bouton "nouvell-ligne" #}
                   {# <tr><td><input class="input is-small" type="text" value=""></td><td><input class="input is-small quantity" type="text" value="1"></td><td><input class="input is-small prix-unite" type="text" value="0,00"></td><td></td></tr> #}
-                  <td><textarea name="l1_designation" class="textarea is-small" cols="40" rows="2" type="text">toto au chateau</textarea></td>
-                  <td><input name="l1_quantity" class="input is-small quantity" type="text" size="8" value="2"></td>
-                  <td><input name="l1_prix-unite" class="input is-small prix-unite" type="text" size="1" value="5,90"></td>
-                  <td class="sous-total"></td>
-                </tr>
-                <tr>
-                  {# Test: ligne de test #}
-                  <td><textarea name="l2_designation" class="textarea is-small" cols="40" rows="2" type="text">Ligne de test</textarea></td>
-                  <td><input name="l2_quantity" class="input is-small quantity" type="text" size="8" value="4"></td>
-                  <td><input name="l2_prix-unite" class="input is-small prix-unite" type="text" size="1" value="6,90"></td>
+                  <td><textarea name="l0_designation" class="textarea is-small" cols="40" rows="2" type="text"></textarea></td>
+                  <td><input name="l0_quantity" class="input is-small quantity" type="text" size="8" value="1"></td>
+                  <td><input name="l0_prix-unite" class="input is-small prix-unite" type="text" size="1" value="0,00"></td>
                   <td class="sous-total"></td>
                 </tr>
                 {% endif %}

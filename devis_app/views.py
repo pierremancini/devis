@@ -58,7 +58,7 @@ def preprint(request, devis_id):
             'lines': lignes
         })
 
-# Les vues Create/Update
+# Ancienne view, apporter des modifications pour utiliser
 def new(request):
     if request.method == 'GET':
         form_devis = DevisForm()
@@ -222,6 +222,7 @@ def new_devis(request):
 
         for n in lines:
             ligne_prix = LignePrix(
+                numero = n,
                 grille_prix = new_grille,
                 designation = lines[n]['designation'],
                 quantité = lines[n]['quantity'],
@@ -282,68 +283,94 @@ def modifier(request, devis_id):
         form_fk = form_set_fk(initial=[{'emeteur': devis.emeteur.id},
                                        {'client': devis.client.id}]).forms[0]
 
-        lines = devis.grille_prix.ligneprix_set.all()
-
+        line_objects =  list(devis.grille_prix.ligneprix_set.all())
+        print("if")
     elif request.method == 'POST':
-        devis = Devis.objects.get(pk=devis_id)
+        print('else')
+        devis = Devis.objects.get(id=devis_id)
 
         # Récupérer les objects liés à devis
         form_devis = DevisForm(instance=devis)
         form_grille = GrillePrixForm(instance=devis.grille_prix)
+        form_set_fk = modelformset_factory(Devis, fields=('emeteur', 'client'))
 
         form_fk = form_set_fk(initial=[{'emeteur': devis.emeteur.id},
                                        {'client': devis.client.id}]).forms[0]
 
-        lines = devis.grille_prix.ligneprix_set.all()
+        # On récupère les instance de Emeteur et Client 
+        emetteur = Emeteur.objects.get(id=request.POST['form-0-emeteur'])
+        client = Client.objects.get(id=request.POST['form-0-client'])
 
-        client.save()
-        emetteur.save()
-        grille.save()
+       
+        # Attention variable écrasée plus bas
+        line_objects = list(devis.grille_prix.ligneprix_set.all())
 
-        devis = Devis(
-            titre = request.POST['titre'],
-            emeteur = emetteur,
-            client = client,
-            grille_prix = grille,
-            date_creation = request.POST['date_creation'],
-            date_emission = request.POST['date_emission'],
-            num_emission = request.POST['num_emission'],
-            mention_total = request.POST['mention_total'],
-            mention = request.POST['mention'])
+        # print(vars(line_objects[2]))
+
+        if request.POST['date_creation']:
+            date_creation = request.POST['date_creation']
+        else:
+            date_creation = None
+
+        if request.POST['date_emission']:
+            date_emission = request.POST['date_emission']
+        else:
+            date_emission = None
+
+        devis.titre = request.POST['titre']
+        devis.emeteur = emetteur
+        devis.client = client
+        devis.grille_prix.devise = request.POST['devise']
+        devis.date_creation = date_creation
+        devis.date_emission = date_emission
+        devis.num_emission = request.POST['num_emission']
+        devis.mention_total = request.POST['mention_total']
+        devis.mention = request.POST['mention']
 
         devis.save()
 
         # Instanciation des objects ligne
-        lines = {}
+        lines_form = {}
         for i in request.POST:
             if re.match('^(l\d+)_(.*)$', i):
                 m = re.match('^l(\d+)_(.*)$', i)
                 line_num = m.group(1)
-                lines.setdefault(line_num, {})
+                lines_form.setdefault(line_num, {})
+                lines_form[line_num]['numero'] = line_num
                 field = m.group(2)
                 if field == 'designation':
-                    lines[line_num]['designation'] = request.POST[i]
+                    lines_form[line_num]['designation'] = request.POST[i]
                 elif field == 'quantity':
-                    lines[line_num]['quantity'] = request.POST[i]
+                    lines_form[line_num]['quantity'] = request.POST[i]
                 elif field == 'prix-unite':
-                    lines[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
+                    lines_form[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
 
         # A changer, on doit modifier certaines lignes au lieu d'instancier de nouveaux objets
-        for n in lines:
-            ligne_prix = LignePrix(
-                grille_prix = new_grille,
-                designation = lines[n]['designation'],
-                quantité = lines[n]['quantity'],
-                prix_unit = lines[n]['prix-unite']
-            )
+        for n in lines_form:
+            try:
+                line_objects[int(n)].grille_prix = devis.grille_prix
+                line_objects[int(n)].designation = lines_form[n]['designation']
+                line_objects[int(n)].quantité = lines_form[n]['quantity']
+                line_objects[int(n)].prix_unit = lines_form[n]['prix-unite']
+                line_objects[int(n)].save()
+            except IndexError:
+                ligne_prix = LignePrix(
+                    numero = n,
+                    grille_prix = devis.grille_prix,
+                    designation = lines_form[n]['designation'],
+                    quantité = lines_form[n]['quantity'],
+                    prix_unit = lines_form[n]['prix-unite']
+                )
+                line_objects.append(ligne_prix)
 
-            ligne_prix.save()
+    pprint(line_objects)
 
+        # return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/modifier.jinja', 
         {'form_fk': form_fk,
         'devis': form_devis,
         'grille': form_grille,
-        'lines': lines})
+        'lines': line_objects})
 
 
 def modifier_tout(request, devis_id):

@@ -15,8 +15,8 @@ class Emeteur(models.Model):
     code_APE = models.CharField(max_length=200, blank=True)
     image_signature = models.ImageField(blank=True)
 
-    def __str__(self):
-        return "Nom: {}, SIRET: {} n°id: {}".format(self.nom, self.code_APE, self.id)
+    # def __str__(self):
+    #     return "Nom: {}, SIRET: {} n°id: {}".format(self.nom, self.code_APE, self.id)
 
 class Client(models.Model):
     nom = models.CharField(max_length=500)
@@ -25,8 +25,8 @@ class Client(models.Model):
     telephone = models.CharField(max_length=200, blank=True)
     fax = models.CharField(max_length=200, blank=True)
 
-    def __str__(self):
-        return "{}, n°id {}".format(self.nom, self.id)
+    # def __str__(self):
+    #     return "{}, n°id {}".format(self.nom, self.id)
 
 
 class Devis(models.Model):
@@ -55,3 +55,7 @@ class LignePrix(models.Model):
     designation = models.TextField(blank=True, null=True)
     quantité = models.IntegerField(default=1)
     prix_unit = models.FloatField()
+    numero = models.IntegerField()
+
+    def __str__(self):
+        return "n°id: {},\ndesignation: {},\nquantité: {},\nprix_unit: {},\nnumero: {}".format(self.id, self.designation, self.quantité, self.prix_unit, self.numero)

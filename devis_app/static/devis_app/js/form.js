@@ -30,7 +30,7 @@ function set_sous_total() {
 }
 
 function next_tr_num() {
-  return $("#grille tbody tr").length + 1
+  return $("#grille tbody tr").length
 }
 
 $(document).ready(function(){
