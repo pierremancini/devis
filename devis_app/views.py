@@ -361,8 +361,6 @@ def modifier(request, devis_id):
                 )
                 line_objects.append(ligne_prix)
 
-    pprint(line_objects)
-
         # return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/modifier.jinja', 
         {'form_fk': form_fk,
