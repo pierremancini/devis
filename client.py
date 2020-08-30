@@ -1,6 +1,6 @@
 # Variables à passer au template jinja
-nom = 'Jean Dupont'
-adresse = ['222 chemin de bo', '33160 St.Médard en jalles']
-telephone = '06 15 77 97 34'
-fax = ''
-email = 'jeau.dupont@gmail.com'
+nom = 'P/o Maître LABROUCHE<br/>Etude de Maitre LABROUCHE'
+adresse = ['173 Boulevard Albert 1er', '33130 BEGLES']
+telephone = '05 56 49 58 82'
+fax = '05 56 49 64 52'
+email = 'herve.labrouche@notaires.fr'

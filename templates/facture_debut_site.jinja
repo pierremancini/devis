@@ -1,0 +1,106 @@
+<!-- 1. mes informations personnelles et professionnelles -->
+<!-- 2. les coordonnées de mon client -->
+<!-- 3. numéro de facturation, ex: 20180601 (année, mois, no de la facture dans le mois) -->
+<!-- 4. la nature de la prestation 
+la désignation des produits vendus ou des prestations de services réalisées,
+la quantité avec le prix unitaire et le prix total HT,
+la date de règlement,
+la date d’exécution de la vente ou de la prestation de service réalisée
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Devis site web</title>
+      <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
+      <link rel="stylesheet" href="template/devis.css"/>
+  </head>
+  <body>
+    
+    <div class="box"><p>{{ nom_emeteur }}<br/>
+      {% for line in adresse_emeteur %}
+      {{ line }}<br/>
+      {% endfor %}
+      E-mail: {{ email_emeteur }}<br/>
+      Télépĥone: {{ telephone_emeteur }}<br/>
+      SIRET: {{ SIRET_emeteur }}<br/>
+      Code APE: {{ Code_APE_emeteur }}</p>
+    </div>
+    
+    <div class="box client"><h2 class="subtitle client">Le client:</h2>
+      <p>{{ nom_client }}<br/>
+        {% for line in adresse_client %}
+        {{ line }}<br/>
+        {% endfor %}
+        Tel: {{ telephone_client }}<br/>
+        {% if fax_client %}Fax: {{ fax_client }}<br/>{% endif %}
+        E-mail: {{ email_client }}<br/></p>
+      </div>
+    <h2 class="subtitle devis">{{ titre }} {{num_facture}}</h2>
+      
+    <table class="table is-bordered is-striped is-fullwidth">
+      <tr>
+        <th>Désignation</th><th>Quantité</th><th>Prix unitaire (HT)</th><th>Montant (HT)</th>
+      </tr>
+      
+        <tr>
+          <td>Page contact</td>
+          <td>1</td>
+          <td>150 €</td>
+          <td>150 €</td>
+        </tr>
+      
+        <tr>
+          <td>Page index annonce bien immobiliers</td>
+          <td>1</td>
+          <td>150 €</td>
+          <td>150 €</td>
+        </tr>
+      
+        <tr>
+          <td>Page annonce bien immobiliers</td>
+          <td>1</td>
+          <td>250 €</td>
+          <td>250 €</td>
+        </tr>
+      
+        <tr>
+          <td>Outil de gestion de publication des annonces</td>
+          <td>1</td>
+          <td>400 €</td>
+          <td>400 €</td>
+        </tr>
+      
+        <tr>
+          <td>Base de données pour les annonces</td>
+          <td>1</td>
+          <td>400 €</td>
+          <td>400 €</td>
+        </tr>
+      
+        <tr>
+          <td>Intégration de la lettre du notaire dans le contenu du site</td>
+          <td>1</td>
+          <td>200 €</td>
+          <td>200 €</td>
+        </tr>
+      
+    </table>
+
+    <div class="box"> TVA non applicable - article 293 B du Code Général des Impôts  <div class="payer"> Total HT 1550 € </div>
+    </div>
+    <br/>
+
+    <div>
+    Date de règlement: {{date_reglement}}
+    </div>
+    <br/>
+    <div>
+    Date de la prestation: {{date_prestation}}
+    </div>
+
+  </body>
+</html>

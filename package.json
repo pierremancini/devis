@@ -1,0 +1,31 @@
+{
+  "name": "devis",
+  "version": "1.0.0",
+  "description": "# Usage",
+  "main": "print-puppeteer.js",
+  "dependencies": {
+    "bufferutil": "^4.0.1",
+    "chrome": "^0.1.0",
+    "commander": "^6.1.0",
+    "fs-extra": "^9.0.0",
+    "nvm": "^0.0.4",
+    "pdf-puppeteer": "^1.1.10",
+    "puppeteer": "^3.0.2",
+    "puppeteer-pdf": "^1.2.0",
+    "utf-8-validate": "^5.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pierremancini/devis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pierremancini/devis/issues"
+  },
+  "homepage": "https://github.com/pierremancini/devis#readme"
+}
