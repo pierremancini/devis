@@ -36,8 +36,7 @@ const headerContent = commander.header;
       headerTemplate: `<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">${headerContent}</div>`,
       footerTemplate: '<div class="text center"><span class="pageNumber"></span></div>',
     });
-   
-    console.log(pdf.toString())
+
     await browser.close();
   } catch (e) {
     console.log('Erreur:',e);
