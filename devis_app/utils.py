@@ -2,8 +2,7 @@ import tempfile
 from django.template.loader import render_to_string
 import subprocess
 from django.http import HttpResponse
-from django.http import FileResponse
-from base64 import b64decode
+import os
 
 def convert_to_pdf(content, header, footer):
     """
@@ -11,7 +10,7 @@ def convert_to_pdf(content, header, footer):
     :param header: HTML/String
     :param footer: HTML/String
     :param converter: Path to script returning pdf file content
-    :return: Fichier pdf
+    :return: Path du fichier pdf temporaire
     """
 
     # Transforme le html/string en fichier temporaire
@@ -26,7 +25,7 @@ def convert_to_pdf(content, header, footer):
 
     # Passer les argument au script node.js
 
-    # Récupérer le retour du script node.js
+
     # 
     # node print-puppeteer.js --html "tmp_out_facture.html" 
     # --css "templates/devis.css" 
@@ -35,11 +34,13 @@ def convert_to_pdf(content, header, footer):
     cmd = ['node', 'print-puppeteer.js',
         '--html', 'tmp_out_facture.html', 
         '--css', 'templates/devis.css',
-        '--pdf', 'out_puppeteer.pdf',
+        '--pdf', '/tmp/tmp_out_puppeteer.pdf',
         '--header','Facture n° 20200805']
-    pdf_content = subprocess.call(cmd)
+    # Récupérer le retour du script node.js 
+    foo = subprocess.call(cmd)
+    pdf_path = '/tmp/tmp_out_puppeteer.pdf'
 
-    return pdf_content
+    return pdf_path
 
 def render_pdf_from_template(template, header, footer, context):
     """ Fonction basée sur une fonction du même nom:
@@ -57,19 +58,19 @@ def render_pdf_from_template(template, header, footer, context):
     # Render to string depuis le template: https://stackoverflow.com/questions/22162027/how-do-i-generate-a-static-html-file-from-a-django-template
     html_content = render_to_string(template, context)
 
-    pdf_content = convert_to_pdf(html_content, header, footer)
+    pdf_path = convert_to_pdf(html_content, header, footer)
 
     # Servir le pdf:
     # https://ourcodeworld.com/articles/read/241/how-to-create-a-pdf-from-html-in-django
     # Create a URL of our project and go to the template route
+    
+    with open(pdf_path, 'rb') as pdf_file:
 
-    print(pdf_content)
-    pdf_content = pdf_content
-    # print(pdf_content)
+        # Generate download
+        response = HttpResponse(pdf_file, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="devis.pdf"'
 
-    # Generate download
-    response = HttpResponse(pdf_content, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="devis.pdf"'
+        os.remove(pdf_path)
 
     return response
 

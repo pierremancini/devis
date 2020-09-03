@@ -30,7 +30,7 @@ const headerContent = commander.header;
     await page.setContent(html)
     await page.addStyleTag({path: cssPath})
     const pdf = await page.pdf({ 
-      // path: pdfPath,
+      path: pdfPath,
       format: 'A4',
       displayHeaderFooter: true,
       headerTemplate: `<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">${headerContent}</div>`,
@@ -40,6 +40,6 @@ const headerContent = commander.header;
     console.log(pdf.toString())
     await browser.close();
   } catch (e) {
-    // console.log('Erreur:',e);
+    console.log('Erreur:',e);
   }
 })();
