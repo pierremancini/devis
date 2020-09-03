@@ -44,7 +44,10 @@ def pdf(request, devis_id):
     footer = '<div class="text center"><span class="pageNumber"></span></div>'
     template = 'devis_app/pdf.html'
 
-    return render_pdf_from_template(template, header, footer, context)
+    response = render_pdf_from_template(template, header, footer, context)
+    response['Content-Disposition'] = 'attachment; filename="{}-{}.pdf"'.format(devis.titre, datetime.today().strftime('%d-%m-%Y'))
+
+    return response
 
 def detail(request, devis_id):
     try:

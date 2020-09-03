@@ -26,7 +26,7 @@ def convert_to_pdf(content, header, footer):
     # Passer les argument au script node.js
 
 
-    # 
+    # Appel du script
     # node print-puppeteer.js --html "tmp_out_facture.html" 
     # --css "templates/devis.css" 
     # --pdf out_puppeteer.pdf 
@@ -68,7 +68,6 @@ def render_pdf_from_template(template, header, footer, context):
 
         # Generate download
         response = HttpResponse(pdf_file, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="devis.pdf"'
 
         os.remove(pdf_path)
 
