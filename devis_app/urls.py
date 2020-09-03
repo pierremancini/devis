@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from puppeteer_pdf.views import PDFTemplateView
 
 from . import views
 
@@ -23,8 +24,11 @@ urlpatterns = [
     path('<int:devis_id>/modifier/', views.modifier, name="modifier"),
     path('<int:devis_id>/delete/', views.delete, name='delete'),
     path('<int:emetteur_id>/delete_emetteur/', views.delete_emetteur, name='delete_emetteur'),
-    path('<int:client_id>/delete_client/', views.delete_client, name='delete_client')
+    path('<int:client_id>/delete_client/', views.delete_client, name='delete_client'),
     # Vues génériques
     # path('nouveau/', views.DevisCreate.as_view(), name='devis-add'),
+    # Génration du pdf
+    # path('<int:devis_id>/pdf/', PDFTemplateView.as_view(template_name='devis_app/pdf.html', filename='devis.pdf'), name='pdf')
+    path('<int:devis_id>/pdf/', views.pdf, name='pdf')
 ]
 

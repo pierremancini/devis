@@ -11,6 +11,8 @@ from .models import Devis, Emeteur, Client, GrillePrix, LignePrix
 from .forms import DevisForm, EmetteurForm, ClientForm, GrillePrixForm
 from django.forms import modelformset_factory
 
+from .utils import render_pdf_from_template
+
 from pprint import pprint
 import re
 from datetime import datetime
@@ -30,6 +32,19 @@ def list_emetteur_client(request):
 
     return render(request, 'devis_app/list.jinja', {'emetteurs': emetteurs,
         'clients': clients})
+
+def pdf(request, devis_id):
+
+    # TODO: Construction du context du template à passer au template
+    devis = Devis.objects.get(pk=devis_id)
+    context = {'some_key': 'some_value'}
+
+    # Construction des header et footer en fonction du context
+    header = '<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">Devis n° 12 - 30/04/2020</div>'
+    footer = '<div class="text center"><span class="pageNumber"></span></div>'
+    template = 'devis_app/pdf.html'
+
+    return render_pdf_from_template(template, header, footer, context)
 
 def detail(request, devis_id):
     try:
