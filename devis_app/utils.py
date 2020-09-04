@@ -17,20 +17,21 @@ def convert_to_pdf(html_content, header, footer):
 
     with open(tmp_html_path, 'w') as tmp_html:
         tmp_html.write(html_content)
-        # Passer les argument au script node.js
-        # Appel du script
-        # node print-puppeteer.js --html "tmp_out_facture.html" 
-        # --css "templates/devis.css" 
-        # --pdf out_puppeteer.pdf 
-        # --header "Facture n° 20200801"
-        cmd = ['node', 'print-puppeteer.js',
-            '--html', tmp_html_path, 
-            '--css', 'templates/devis.css',
-            '--pdf', '/tmp/tmp_out_puppeteer.pdf',
-            '--header','Facture n° 20200805']
-        # Récupérer le retour du script node.js 
-        foo = subprocess.call(cmd)
-        pdf_path = '/tmp/tmp_out_puppeteer.pdf'
+
+    # Appel du script
+    # node print-puppeteer.js --html "tmp_out_facture.html" 
+    # --css "templates/devis.css" 
+    # --pdf out_puppeteer.pdf 
+    # --header "Facture n° 20200801"
+    cmd = ['node', 'print-puppeteer.js',
+        '--html', tmp_html_path, 
+        '--css', 'templates/devis.css',
+        '--pdf', '/tmp/tmp_out_puppeteer.pdf',
+        '--header','Facture n° 20200805']
+
+    # Récupérer le retour du script node.js sinon la page se charge sans arret
+    foo = subprocess.call(cmd)
+    pdf_path = '/tmp/tmp_out_puppeteer.pdf'
 
     os.remove(tmp_html_path)
 
