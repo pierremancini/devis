@@ -37,7 +37,27 @@ def pdf(request, devis_id):
 
     # TODO: Construction du context du template à passer au template
     devis = Devis.objects.get(pk=devis_id)
-    context = {'some_key': 'some_value'}
+
+    context = {'titre': devis.titre,
+                'date_emission': devis.date_emission,
+                'num_emission': devis.num_emission,
+                'mention_total': devis.mention_total,
+                'mention': devis.mention,
+                'devise': devis.grille_prix.devise,
+                'nom_emetteur': devis.emeteur.nom,
+                'adresse_emetteur': devis.emeteur.adresse,
+                'email_emetteur': devis.emeteur.email,
+                'telephone_emetteur': devis.emeteur.telephone,
+                'fax_emetteur': devis.emeteur.fax,
+                'SIRET': devis.emeteur.SIRET,
+                'code_APE': devis.emeteur.code_APE,
+                'image_signature': devis.emeteur.image_signature,
+                'nom_client': devis.client.nom,
+                'adresse_client': devis.client.adresse,
+                'email_client': devis.client.email,
+                'telephone_client': devis.client.telephone,
+                'fax_client': devis.client.fax
+        }
 
     # Construction des header et footer en fonction du context
     header = '<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">Devis n° 12 - 30/04/2020</div>'

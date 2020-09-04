@@ -4,7 +4,7 @@ import subprocess
 from django.http import HttpResponse
 import os
 
-def convert_to_pdf(content, header, footer):
+def convert_to_pdf(html_content, header, footer):
     """
     :param template: Chemin vers le template utilisé pour générer le HTML final
     :param header: HTML/String
@@ -13,34 +13,29 @@ def convert_to_pdf(content, header, footer):
     :return: Path du fichier pdf temporaire
     """
 
-    # Transforme le html/string en fichier temporaire
-    html_tempfile = tempfile.NamedTemporaryFile()
-    try:
-        html_tempfile.write(content.encode('utf-8'))
-        html_tempfile.flush()
-    except:
-        # Clean-up tempfile if an Exception is raised.
-        html_tempfile.close()
-        raise
+    tmp_html_path = '/tmp/tmp_out_facture.html'
 
-    # Passer les argument au script node.js
+    with open(tmp_html_path, 'w') as tmp_html:
+        tmp_html.write(html_content)
+        # Passer les argument au script node.js
+        # Appel du script
+        # node print-puppeteer.js --html "tmp_out_facture.html" 
+        # --css "templates/devis.css" 
+        # --pdf out_puppeteer.pdf 
+        # --header "Facture n° 20200801"
+        cmd = ['node', 'print-puppeteer.js',
+            '--html', tmp_html_path, 
+            '--css', 'templates/devis.css',
+            '--pdf', '/tmp/tmp_out_puppeteer.pdf',
+            '--header','Facture n° 20200805']
+        # Récupérer le retour du script node.js 
+        foo = subprocess.call(cmd)
+        pdf_path = '/tmp/tmp_out_puppeteer.pdf'
 
-
-    # Appel du script
-    # node print-puppeteer.js --html "tmp_out_facture.html" 
-    # --css "templates/devis.css" 
-    # --pdf out_puppeteer.pdf 
-    # --header "Facture n° 20200801"
-    cmd = ['node', 'print-puppeteer.js',
-        '--html', 'tmp_out_facture.html', 
-        '--css', 'templates/devis.css',
-        '--pdf', '/tmp/tmp_out_puppeteer.pdf',
-        '--header','Facture n° 20200805']
-    # Récupérer le retour du script node.js 
-    foo = subprocess.call(cmd)
-    pdf_path = '/tmp/tmp_out_puppeteer.pdf'
+    os.remove(tmp_html_path)
 
     return pdf_path
+
 
 def render_pdf_from_template(template, header, footer, context):
     """ Fonction basée sur une fonction du même nom:
@@ -49,7 +44,7 @@ def render_pdf_from_template(template, header, footer, context):
     A intégrer dans une view django.
     Remplace la fonction render (django.shortcuts).
 
-    :param template: 
+    :param template: HTML template path
     :param header: 
     :param footer: 
     :return: 
