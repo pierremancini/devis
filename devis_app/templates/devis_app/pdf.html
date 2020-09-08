@@ -34,7 +34,7 @@
     <table class="table is-bordered is-striped is-fullwidth">
       <thead>
         <tr>
-          <th>Désignation</th><th>Quantité</th><th>Prix unitaire (HT)</th><th>Montant (HT)</th>
+          <th>Désignation</th><th>Quantité</th><th>Prix unitaire (HT) {{ grille.devise }}</th><th>Montant (HT) {{ grille.devise }}</th>
         </tr>
       </thead>
       <tbody>
@@ -43,14 +43,14 @@
         <tr>
           <td>{{ line.designation }}</td>
           <td>{{ line.quantité }}</td>
-          <td>{{ line.prix_unit }} {{ grille.devise }}</td>
-          <td>{{ line.montant }} {{ grille.devise }}</td>
+          <td>{{ line.prix_unit }}</td>
+          <td>{{ line.montant }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
 
-    <div class='box'>{{mention_total}}: {{grille.total}} {{grille.devise}}</div>
+    <div class='box'>{{mention_total}} {{grille.total}} {{grille.devise}}</div>
 
     <div>{{mention}}</div>
     <p>Durée de validité du devis: 90 jours </p><br/>
@@ -58,9 +58,9 @@
     <p>Le paiement des prestations interviendra par virement sur le compte bancaire dont le RIB a été communiqué au client.</p>
     <br/>
 
-    <p>Signature: </p>
     <div>{{image_signature}}</div>
-
+    
+    <p>Signature: </p>
     <p>Faire précéder votre signature de la mention
       « Lu et approuvé, bon pour accord le  »<br/></p>
     
