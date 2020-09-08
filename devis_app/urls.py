@@ -12,7 +12,7 @@ urlpatterns = [
     # exemple: /devis/ 
     path('', views.index, name='index'),
     # exemple: /devis/5/
-    path('<int:devis_id>/', views.detail, name='detail'),
+    path('<int:devis_id>/', views.preprint, name='detail'),
     # ex: /devis/5/preprint/
     path('<int:devis_id>/preprint/', views.preprint, name="preprint"),
     # exemple: /devis/nouveau/

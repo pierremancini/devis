@@ -4,6 +4,7 @@ from datetime import date
 
 class GrillePrix(models.Model):
     devise = models.CharField(max_length=200)
+    total = models.FloatField(blank=True, null=True)
 
 class Emeteur(models.Model):
     nom = models.CharField(max_length=500)
@@ -56,6 +57,7 @@ class LignePrix(models.Model):
     quantité = models.IntegerField(default=1)
     prix_unit = models.FloatField()
     numero = models.IntegerField()
+    montant = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return "n°id: {},\ndesignation: {},\nquantité: {},\nprix_unit: {},\nnumero: {}".format(self.id, self.designation, self.quantité, self.prix_unit, self.numero)

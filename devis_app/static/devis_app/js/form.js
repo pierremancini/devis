@@ -7,13 +7,13 @@ function roundDecimal(x) {
 function set_total() {
   total = 0;
   $(".sous-total").each(function() {
-    sous_total = parseFloat($(this).text().replace(',','.'));
+    sous_total = parseFloat($(this).val().replace(',','.'));
     if (!isNaN(sous_total)) {
       total += sous_total;
     }
   });
   total = roundDecimal(total).toFixed(2);
-  $("#total").text(total.toString().replace('.', ','));
+  $("#total").val(total.toString().replace('.', ','));
   return $("#total");
 }
 
@@ -24,7 +24,7 @@ function set_sous_total() {
     var product = quantity_int * prix_float;
     if (product !== NaN) {
       var sous_total = roundDecimal(product).toFixed(2).toString().replace('.', ',');
-      $( this ).find(".sous-total").text(sous_total);
+      $( this ).find(".sous-total").val(sous_total);
     }
   });
 }
@@ -60,7 +60,7 @@ $(document).ready(function(){
     textarea = '<tr><td><textarea name="l'+tr_num+'_designation" class="textarea is-small" cols="40" rows="2" type="text"></textarea></td>';
     td_quantity =  '<td><input name="l'+tr_num+'_quantity" class="input is-small quantity" type="text" size="8" value="1"></td>';
     td_prix_unite = '<td><input name="l'+tr_num+'_prix-unite" class="input is-small prix-unite" type="text" size="1" value=""></td>';
-    td_sous_total = '<td class="sous-total"></td>';
+    td_sous_total = '<td><input name="l'+tr_num+'_montant" class="input is-small sous-total" size="2" type="text"></td>';
     html_tr = textarea + td_quantity + td_prix_unite + td_sous_total
     $("#grille tbody tr:last").after(html_tr);
 

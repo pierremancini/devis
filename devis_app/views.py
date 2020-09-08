@@ -38,6 +38,11 @@ def pdf(request, devis_id):
     # TODO: Construction du context du template à passer au template
     devis = Devis.objects.get(pk=devis_id)
 
+    line_objects = list(devis.grille_prix.ligneprix_set.all())
+
+    pprint(devis.grille_prix.total)
+
+    # Consitution de la grille de prix
     context = {'titre': devis.titre,
                 'date_emission': devis.date_emission,
                 'num_emission': devis.num_emission,
@@ -56,7 +61,9 @@ def pdf(request, devis_id):
                 'adresse_client': devis.client.adresse,
                 'email_client': devis.client.email,
                 'telephone_client': devis.client.telephone,
-                'fax_client': devis.client.fax
+                'fax_client': devis.client.fax,
+                'lines': line_objects,
+                'grille': devis.grille_prix
         }
 
     # Construction des header et footer en fonction du context
@@ -78,23 +85,38 @@ def detail(request, devis_id):
 
 def preprint(request, devis_id):
     try:
-        # On passe tout les valeurs nécessaires à la création du pdf
-        # Pour cela on utilise l'identifiant du devis et on remonte aux autres valeurs qui lui sont liées
+        # TODO: Construction du context du template à passer au template
         devis = Devis.objects.get(pk=devis_id)
-        grille = devis.grille_prix
-        lignes = grille.ligneprix_set.all
-        emeteur = devis.emeteur
-        client = devis.client
+
+        line_objects = list(devis.grille_prix.ligneprix_set.all())
+
+        # Consitution de la grille de prix
+        context = {'titre': devis.titre,
+                    'date_emission': devis.date_emission,
+                    'num_emission': devis.num_emission,
+                    'mention_total': devis.mention_total,
+                    'mention': devis.mention,
+                    'devise': devis.grille_prix.devise,
+                    'nom_emetteur': devis.emeteur.nom,
+                    'adresse_emetteur': devis.emeteur.adresse,
+                    'email_emetteur': devis.emeteur.email,
+                    'telephone_emetteur': devis.emeteur.telephone,
+                    'fax_emetteur': devis.emeteur.fax,
+                    'SIRET': devis.emeteur.SIRET,
+                    'code_APE': devis.emeteur.code_APE,
+                    'image_signature': devis.emeteur.image_signature,
+                    'nom_client': devis.client.nom,
+                    'adresse_client': devis.client.adresse,
+                    'email_client': devis.client.email,
+                    'telephone_client': devis.client.telephone,
+                    'fax_client': devis.client.fax,
+                    'lines': line_objects,
+                    'grille': devis.grille_prix
+            }
+
     except Devis.DoesNotExist:
         raise Http404("Devis n° {} inexistant".format(devis_id))
-    return render(request, 'devis_app/print_devis.jinja',
-        {
-            'devis': devis,
-            'emeteur': emeteur,
-            'client': client,
-            'grille': grille,
-            'lines': lignes
-        })
+    return render(request, 'devis_app/pdf.html', context)
 
 # Ancienne view, apporter des modifications pour utiliser
 def new(request):
@@ -215,7 +237,8 @@ def new_devis(request):
 
 
         new_grille = GrillePrix(
-            devise = request.POST['devise']
+            devise = request.POST['devise'],
+            total = request.POST['total'].replace(',', '.')
         )
 
         new_grille.save()
@@ -257,6 +280,8 @@ def new_devis(request):
                     lines[line_num]['quantity'] = request.POST[i]
                 elif field == 'prix-unite':
                     lines[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
+                elif field == 'montant':
+                    lines[line_num]['montant'] = request.POST[i].replace(',', '.')
 
         for n in lines:
             ligne_prix = LignePrix(
@@ -264,7 +289,8 @@ def new_devis(request):
                 grille_prix = new_grille,
                 designation = lines[n]['designation'],
                 quantité = lines[n]['quantity'],
-                prix_unit = lines[n]['prix-unite']
+                prix_unit = lines[n]['prix-unite'],
+                montant = lines[n]['montant']
             )
 
             ligne_prix.save()
@@ -355,6 +381,7 @@ def modifier(request, devis_id):
         devis.emeteur = emetteur
         devis.client = client
         devis.grille_prix.devise = request.POST['devise']
+        devis.grille_prix.total = request.POST['total'].replace(',', '.')
         devis.date_creation = date_creation
         devis.date_emission = date_emission
         devis.num_emission = request.POST['num_emission']
@@ -379,6 +406,8 @@ def modifier(request, devis_id):
                     lines_form[line_num]['quantity'] = request.POST[i]
                 elif field == 'prix-unite':
                     lines_form[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
+                elif field == 'montant':
+                    lines_form[line_num]['montant'] = request.POST[i].replace(',', '.')
 
         # A changer, on doit modifier certaines lignes au lieu d'instancier de nouveaux objets
         for n in lines_form:
@@ -387,6 +416,7 @@ def modifier(request, devis_id):
                 line_objects[int(n)].designation = lines_form[n]['designation']
                 line_objects[int(n)].quantité = lines_form[n]['quantity']
                 line_objects[int(n)].prix_unit = lines_form[n]['prix-unite']
+                line_objects[int(n)].montant = lines_form[n]['montant']
                 line_objects[int(n)].save()
             except IndexError:
                 ligne_prix = LignePrix(
@@ -394,7 +424,8 @@ def modifier(request, devis_id):
                     grille_prix = devis.grille_prix,
                     designation = lines_form[n]['designation'],
                     quantité = lines_form[n]['quantity'],
-                    prix_unit = lines_form[n]['prix-unite']
+                    prix_unit = lines_form[n]['prix-unite'],
+                    montant = lines_form[n]['montant']
                 )
                 line_objects.append(ligne_prix)
 
