@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from puppeteer_pdf.views import PDFTemplateView
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from . import views
 
@@ -31,4 +32,7 @@ urlpatterns = [
     # path('<int:devis_id>/pdf/', PDFTemplateView.as_view(template_name='devis_app/pdf.html', filename='devis.pdf'), name='pdf')
     path('<int:devis_id>/pdf/', views.pdf, name='pdf')
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -39,7 +39,6 @@
       </thead>
       <tbody>
       {% for line in lines %}
-        {{line}}
         <tr>
           <td>{{ line.designation }}</td>
           <td>{{ line.quantité }}</td>
@@ -58,7 +57,7 @@
     <p>Le paiement des prestations interviendra par virement sur le compte bancaire dont le RIB a été communiqué au client.</p>
     <br/>
 
-    <div>{{image_signature}}</div>
+    <div><img src="{{image_signature.url}}"></div>
     
     <p>Signature: </p>
     <p>Faire précéder votre signature de la mention
