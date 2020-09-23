@@ -434,10 +434,13 @@ def modifier(request, devis_id):
 
         # return HttpResponseRedirect(reverse('devis:index'))
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     return render(request, 'devis_app/modifier.jinja', 
         {'form_fk': form_fk,
         'devis': form_devis,
 =======
+=======
+>>>>>>> Stashed changes
     return render(request, 'devis_app/modifier.html', 
         {'devis': form_devis,
 >>>>>>> Stashed changes
