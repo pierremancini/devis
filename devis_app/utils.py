@@ -27,7 +27,7 @@ def convert_to_pdf(html_content, header, footer):
         '--html', tmp_html_path, 
         '--css', 'templates/devis.css',
         '--pdf', '/tmp/tmp_out_puppeteer.pdf',
-        '--header','Facture n° 20200805']
+        '--header','Devis n° 7 - le 16 septembre 2020']
 
     # Récupérer le retour du script node.js sinon la page se charge sans arret
     foo = subprocess.call(cmd)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.views.generic import ListView
@@ -17,6 +18,7 @@ from pprint import pprint
 import re
 from datetime import datetime
 
+@login_required
 def index(request):
     try:
         dernier_crees = Devis.objects.order_by('-date_creation')[:9]
@@ -26,6 +28,7 @@ def index(request):
     return render(request, 'devis_app/index.html', {'dernier_crees': dernier_crees,
         'dernier_emis': dernier_emis})
 
+@login_required
 def list_emetteur_client(request):    
     emetteurs = Emeteur.objects.all()
     clients = Client.objects.all()
@@ -33,9 +36,9 @@ def list_emetteur_client(request):
     return render(request, 'devis_app/list.jinja', {'emetteurs': emetteurs,
         'clients': clients})
 
+@login_required
 def pdf(request, devis_id):
 
-    # TODO: Construction du context du template à passer au template
     devis = Devis.objects.get(pk=devis_id)
 
     line_objects = list(devis.grille_prix.ligneprix_set.all())
@@ -66,6 +69,7 @@ def pdf(request, devis_id):
                 'grille': devis.grille_prix
         }
 
+    # TODO: Supprimer ces variables
     # Construction des header et footer en fonction du context
     header = '<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">Devis n° 12 - 30/04/2020</div>'
     footer = '<div class="text center"><span class="pageNumber"></span></div>'
@@ -76,13 +80,7 @@ def pdf(request, devis_id):
 
     return response
 
-def detail(request, devis_id):
-    try:
-        devis = Devis.objects.get(pk=devis_id)
-    except Devis.DoesNotExist:
-        raise Http404("Devis n° {} inexistant".format(devis_id))
-    return render(request, 'devis_app/detail.jinja', {'devis': devis})
-
+@login_required
 def preprint(request, devis_id):
     try:
         # TODO: Construction du context du template à passer au template
@@ -119,6 +117,7 @@ def preprint(request, devis_id):
     return render(request, 'devis_app/pdf.html', context)
 
 # Ancienne view, apporter des modifications pour utiliser
+@login_required
 def new(request):
     if request.method == 'GET':
         form_devis = DevisForm()
@@ -207,12 +206,13 @@ def new(request):
             ligne_prix.save()
         return HttpResponseRedirect(reverse('devis:index'))
 
-    return render(request, 'devis_app/tabs_new.jinja', 
+    return render(request, 'devis_app/tabs_new.html', 
         {'devis': form_devis, 
         'emetteur': form_emetteur,
         'client': form_client,
         'grille': form_grille})
 
+@login_required
 def new_devis(request):
     if request.method == 'GET':
         form_devis = DevisForm()
@@ -300,6 +300,7 @@ def new_devis(request):
         'grille': form_grille,
         'form_fk': form_fk})
 
+@login_required
 def new_emetteur(request):
     if request.method == 'GET':
         form = EmetteurForm()
@@ -319,6 +320,7 @@ def new_emetteur(request):
         return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/new_object.jinja', {'view': form, 'type': 'Emetteur'})
 
+@login_required
 def new_client(request):
     if request.method == 'GET':
         form = ClientForm()
@@ -335,6 +337,7 @@ def new_client(request):
         return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/new_object.jinja', {'view': form, 'type': 'Client'})
 
+@login_required
 def modifier(request, devis_id):
     if request.method == 'GET':
         devis = Devis.objects.get(pk=devis_id)
@@ -430,14 +433,19 @@ def modifier(request, devis_id):
                 line_objects.append(ligne_prix)
 
         # return HttpResponseRedirect(reverse('devis:index'))
+<<<<<<< Updated upstream
     return render(request, 'devis_app/modifier.jinja', 
         {'form_fk': form_fk,
         'devis': form_devis,
+=======
+    return render(request, 'devis_app/modifier.html', 
+        {'devis': form_devis,
+>>>>>>> Stashed changes
         'grille': form_grille,
         'lines': line_objects,
         'devis_id': devis_id})
 
-
+@login_required
 def modifier_tout(request, devis_id):
     if request.method == 'GET':
         devis = Devis.objects.get(pk=devis_id)
@@ -529,24 +537,26 @@ def modifier_tout(request, devis_id):
 
             ligne_prix.save()
 
-    return render(request, 'devis_app/modifier.jinja', 
+    return render(request, 'devis_app/modifier.html', 
         {'devis': form_devis, 
         'emetteur': form_emetteur,
         'client': form_client,
         'grille': form_grille,
         'lines': lines})
 
-
+@login_required
 def delete(request, devis_id):
     devis = Devis.objects.get(pk=devis_id)
     devis.delete()
     return redirect('/devis')
 
+@login_required
 def delete_emetteur(request, emetteur_id):
     emetteur = Emeteur.objects.get(pk=emetteur_id)
     emetteur.delete()
     return redirect('/devis/list_emetteur_client/')
 
+@login_required
 def delete_client(request, client_id):
     client = Client.objects.get(pk=client_id)
     client.delete()

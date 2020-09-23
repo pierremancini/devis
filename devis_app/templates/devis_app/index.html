@@ -1,62 +1,54 @@
+{% extends "base.html" %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
-    <link rel="stylesheet" href=""/>
-  </head>
-  <body>
-    <h1 class="has-text-centered title">Devis</h1></br>
-    <div class="has-text-centered">
-      <a class="button" href="{% url 'devis:new_emetteur'%}">Nouveau Emetteur</a>
-      <a class="button" href="{% url 'devis:new_client'%}">Nouveau Client</a>
-      <a class="button" href="{% url 'devis:new_devis'%}">Nouveau Devis</a>
+{% block content %}
+  <h1 class="has-text-centered title">Devis</h1></br>
+  <div class="has-text-centered">
+    <a class="button" href="{% url 'devis:new_emetteur'%}">Nouveau Emetteur</a>
+    <a class="button" href="{% url 'devis:new_client'%}">Nouveau Client</a>
+    <a class="button" href="{% url 'devis:new_devis'%}">Nouveau Devis</a>
+  </div>
+  </br>
+  <div class="has-text-centered">
+    <h2>Liste des Emetteur et Client:</h2>
+    <a class="button" href="{% url 'devis:list_emetteur_client'%}">Emetteur et Client</a>
+  </div>
+  <div class="columns has-text-centered">
+    <div class="column">
+      <h2 class="has-text-centered subtitle">Devis créés</h2>
+      {% if dernier_crees %}
+      <ul>
+        {% for devis_cree in dernier_crees %}
+        <li>
+          <span>{{devis_cree.date_creation}}</span> ---
+          <a href="{% url 'devis:detail' devis_cree.id %}">{{ devis_cree.titre }} <i class="fas fa-eye"></i></a> --- 
+          <a href="{% url 'devis:modifier' devis_cree.id %}"><i class="fas fa-edit"></i></a> --- 
+          <a href="{% url 'devis:delete' devis_cree.id %}"><i class="fas fa-trash-alt"></i></a> --- 
+          <a href="{% url 'devis:pdf' devis_cree.id %}"><i class="fas fa-file-pdf"></i></a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <p>Aucun devis créé</p>
+      {% endif %}
     </div>
-    </br>
-    <div class="has-text-centered">
-      <h2>Liste des Emetteur et Client:</h2>
-      <a class="button" href="{% url 'devis:list_emetteur_client'%}">Emetteur et Client</a>
-    </div>
-    <div class="columns has-text-centered">
-      <div class="column">
-        <h2 class="has-text-centered subtitle">Devis créés</h2>
-        {% if dernier_crees %}
-        <ul>
-          {% for devis_cree in dernier_crees %}
+    <div class="column">
+      <h2 class="has-text-centered subtitle">Emis</h2>
+      {% if dernier_emis %}
+      <ul>
+        {% for devis_emis in dernier_emis %}
           <li>
-            <span>{{devis_cree.date_creation}}</span> ---
-            <a href="{% url 'devis:detail' devis_cree.id %}">{{ devis_cree.titre }} <i class="fas fa-eye"></i></a> --- 
-            <a href="{% url 'devis:modifier' devis_cree.id %}"><i class="fas fa-edit"></i></a> --- 
-            <a href="{% url 'devis:delete' devis_cree.id %}"><i class="fas fa-trash-alt"></i></a> --- 
-            <a href="{% url 'devis:pdf' devis_cree.id %}"><i class="fas fa-file-pdf"></i></a>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-          <p>Aucun devis créé</p>
-        {% endif %}
-      </div>
-      <div class="column">
-        <h2 class="has-text-centered subtitle">Emis</h2>
-        {% if dernier_emis %}
-        <ul>
-          {% for devis_emis in dernier_emis %}
-           <li>
-            <span>{{devis_emis.date_creation}}</span> ---
-            <a href="{% url 'devis:detail' devis_emis.id %}">{{ devis_emis.titre }} <i class="fas fa-eye"></i></a> --- 
-            <a href="{% url 'devis:modifier' devis_emis.id %}"><i class="fas fa-edit"></i></a> --- 
-            <a href="{% url 'devis:delete' devis_emis.id %}"><i class="fas fa-trash-alt"></i></a>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-          <p>Aucun devis émis</p>
-        {% endif %}
-      </div>
+          <span>{{devis_emis.date_creation}}</span> ---
+          <a href="{% url 'devis:detail' devis_emis.id %}">{{ devis_emis.titre }} <i class="fas fa-eye"></i></a> --- 
+          <a href="{% url 'devis:modifier' devis_emis.id %}"><i class="fas fa-edit"></i></a> --- 
+          <a href="{% url 'devis:delete' devis_emis.id %}"><i class="fas fa-trash-alt"></i></a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <p>Aucun devis émis</p>
+      {% endif %}
     </div>
-    <script src="https://kit.fontawesome.com/86a11fcf22.js" crossorigin="anonymous"></script>
-  </body>
-</html>
+  </div>
+{% endblock %}

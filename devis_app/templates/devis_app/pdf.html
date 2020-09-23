@@ -9,11 +9,15 @@
     <link rel="stylesheet" href="templates/devis.css"/>
   </head>
   <body>
-    <h2 class="subtitle devis"> {{titre}} - le {{date_emission}} - devis n° {{num_emission}}</h2>
+    <h2 class="subtitle devis"> {{titre}}</h2>
     <div class="box" id="emetteur">
       <p>
         {{nom_emetteur}}<br/>
+<<<<<<< Updated upstream
         {{adresse_emetteur}}<br/>
+=======
+        {{adresse_emetteur|linebreaks}}
+>>>>>>> Stashed changes
         E-mail: {{email_emetteur}}<br/>
         Tel: {{telephone_emetteur}}<br/>
         SIRET: {{SIRET}}<br/>
@@ -24,7 +28,11 @@
       <h2 class="subtitle client">Le client:</h2>
       <p>
         {{nom_client}}<br/>
+<<<<<<< Updated upstream
         {{adresse_client}}<br/>
+=======
+        {{adresse_client|linebreaks}}
+>>>>>>> Stashed changes
         E-mail: {{email_client}}<br/>
         Tel: {{telephone_client}}<br/>
         {% if fax_client %}Fax: {{ fax_client }}<br/>{% endif %}<br/>
