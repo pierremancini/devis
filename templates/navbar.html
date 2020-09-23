@@ -1,0 +1,26 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{% url 'accueil' %}">
+      <i class="fas fa-home"></i>
+    </a>
+    <a class="navbar-item" href="{% url 'devis:index' %}">
+      Devis
+
+    </a>
+    <a class="navbar-item" href="">
+      Factures
+    </a>
+    <div class="navbar-item">
+      <div class="buttons">
+        <a class="navbar-item button is-primary" href="{% url 'login' %}">
+          Login
+          <i class="fas fa-sign-in-alt"></i>
+        </a>
+        <a class="navbar-item button is-light" href="{% url 'logout' %}">
+          Logout
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

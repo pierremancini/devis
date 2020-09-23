@@ -432,21 +432,6 @@ def modifier(request, devis_id):
                 )
                 line_objects.append(ligne_prix)
 
-        # return HttpResponseRedirect(reverse('devis:index'))
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    return render(request, 'devis_app/modifier.jinja', 
-        {'form_fk': form_fk,
-        'devis': form_devis,
-=======
-=======
->>>>>>> Stashed changes
-    return render(request, 'devis_app/modifier.html', 
-        {'devis': form_devis,
->>>>>>> Stashed changes
-        'grille': form_grille,
-        'lines': line_objects,
-        'devis_id': devis_id})
 
 @login_required
 def modifier_tout(request, devis_id):
