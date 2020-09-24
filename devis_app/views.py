@@ -262,7 +262,8 @@ def new_devis(request):
             date_emission = date_emission,
             num_emission = request.POST['num_emission'],
             mention_total = request.POST['mention_total'],
-            mention = request.POST['mention'])
+            mention = request.POST['mention'],
+            createur=request.user)
 
         new_devis.save()
 
@@ -306,6 +307,7 @@ def new_emetteur(request):
         form = EmetteurForm()
     elif request.method == 'POST':
         form = EmetteurForm(request.POST)
+        print(request.user)
         new_emetteur = Emeteur(
             nom = request.POST['nom_emetteur'],
             adresse = request.POST['adresse_emetteur'],
@@ -314,7 +316,8 @@ def new_emetteur(request):
             fax = request.POST['fax_emetteur'],
             SIRET = request.POST['SIRET'],
             code_APE = request.POST['code_APE'],
-            image_signature = request.POST['image_signature']
+            image_signature = request.POST['image_signature'],
+            createur=request.user
         )
         new_emetteur.save()
         return HttpResponseRedirect(reverse('devis:index'))
@@ -331,7 +334,8 @@ def new_client(request):
             adresse = request.POST['adresse_client'],
             email = request.POST['email_client'],
             telephone = request.POST['telephone_client'],
-            fax = request.POST['fax_client']
+            fax = request.POST['fax_client'],
+            createur=request.user
         )
         new_client.save()
         return HttpResponseRedirect(reverse('devis:index'))

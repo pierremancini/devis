@@ -21,7 +21,7 @@ FIELD_NAME_EMETTEUR = {
 class EmetteurForm(forms.ModelForm):
     class Meta:
         model = Emeteur
-        fields = '__all__'
+        fields = ['nom', 'adresse', 'email', 'telephone', 'fax', 'SIRET', 'code_APE', 'image_signature']
 
     # https://stackoverflow.com/questions/8801910/override-django-form-fields-name-attr
     def add_prefix(self, field_name):
@@ -42,7 +42,8 @@ FIELD_NAME_CLIENT = {
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['nom', 'adresse', 'email', 'telephone', 'fax']
 
     def add_prefix(self, field_name):
         # look up field name; return original if not found

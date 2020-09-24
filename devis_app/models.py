@@ -1,12 +1,19 @@
 from django.db import models
 from django.conf import settings
 from datetime import date
+from django.contrib.auth import get_user_model
 
 class GrillePrix(models.Model):
     devise = models.CharField(max_length=200)
     total = models.FloatField(blank=True, null=True)
 
 class Emeteur(models.Model):
+    createur = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.SET_NULL, 
+      null=True,
+      blank=True
+    )
     nom = models.CharField(max_length=500)
     adresse = models.TextField(blank=True)
     email = models.CharField(max_length=200, blank=True)
@@ -20,6 +27,12 @@ class Emeteur(models.Model):
     #     return "Nom: {}, SIRET: {} n°id: {}".format(self.nom, self.code_APE, self.id)
 
 class Client(models.Model):
+    createur = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.SET_NULL, 
+      null=True,
+      blank=True
+    )
     nom = models.CharField(max_length=500)
     adresse = models.TextField()
     email = models.CharField(max_length=200, blank=True)
@@ -31,6 +44,12 @@ class Client(models.Model):
 
 
 class Devis(models.Model):
+    createur = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.SET_NULL, 
+      null=True,
+      blank=True
+    )
     titre = models.CharField(max_length=200, default='Titre devis par défault')
     grille_prix = models.ForeignKey(GrillePrix, on_delete=models.CASCADE)
     emeteur = models.ForeignKey(Emeteur, on_delete=models.CASCADE)
