@@ -57,7 +57,12 @@
     <p>Le paiement des prestations interviendra par virement sur le compte bancaire dont le RIB a été communiqué au client.</p>
     <br/>
 
-    <div><img src="{{image_signature.url}}"></div>
+    
+    <div>
+      {% if image_signature %}
+        <img src="{{image_signature.url}}">
+      {% endif %}
+    </div>
     
     <p>Signature: </p>
     <p>Faire précéder votre signature de la mention
