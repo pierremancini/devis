@@ -7,10 +7,10 @@
     "bufferutil": "^4.0.1",
     "chrome": "^0.1.0",
     "commander": "^6.1.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^9.0.1",
     "nvm": "^0.0.4",
     "pdf-puppeteer": "^1.1.10",
-    "puppeteer": "^3.0.2",
+    "puppeteer": "^3.3.0",
     "puppeteer-pdf": "^1.2.0",
     "utf-8-validate": "^5.0.2"
   },
