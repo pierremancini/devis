@@ -67,14 +67,12 @@ def pdf(request, devis_id):
                 'grille': devis.grille_prix
         }
 
-    # TODO: Supprimer ces variables
-    # Construction des header et footer en fonction du context
-    header = '<style>#pageHeader { margin: 20px; }</style><div class="text" id="pageHeader">Devis n° 12 - 30/04/2020</div>'
-    footer = '<div class="text center"><span class="pageNumber"></span></div>'
+    date = datetime.today().strftime('%d-%m-%Y')
+    header = 'Devis n° {} - {}'.format(devis.num_emission, date)
     template = 'devis_app/pdf.html'
 
-    response = render_pdf_from_template(template, header, footer, context)
-    response['Content-Disposition'] = 'attachment; filename="{}-{}.pdf"'.format(devis.titre, datetime.today().strftime('%d-%m-%Y'))
+    response = render_pdf_from_template(template, header, context)
+    response['Content-Disposition'] = 'attachment; filename="{}-{}.pdf"'.format(devis.titre, date)
 
     return response
 

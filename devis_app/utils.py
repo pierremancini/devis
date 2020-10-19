@@ -4,7 +4,7 @@ import subprocess
 from django.http import HttpResponse
 import os
 
-def convert_to_pdf(html_content, header, footer):
+def convert_to_pdf(html_content, header):
     """
     :param template: Chemin vers le template utilisé pour générer le HTML final
     :param header: HTML/String
@@ -27,7 +27,7 @@ def convert_to_pdf(html_content, header, footer):
         '--html', tmp_html_path, 
         '--css', 'templates/devis.css',
         '--pdf', '/tmp/tmp_out_puppeteer.pdf',
-        '--header','Devis n° 7 - le 16 septembre 2020']
+        '--header', header]
 
     # Récupérer le retour du script node.js sinon la page se charge sans arret
     foo = subprocess.call(cmd)
@@ -38,7 +38,7 @@ def convert_to_pdf(html_content, header, footer):
     return pdf_path
 
 
-def render_pdf_from_template(template, header, footer, context):
+def render_pdf_from_template(template, header, context):
     """ Fonction basée sur une fonction du même nom:
     https://github.com/namespace-ee/django-puppeteer-pdf/blob/master/puppeteer_pdf/utils.py
     
@@ -54,7 +54,7 @@ def render_pdf_from_template(template, header, footer, context):
     # Render to string depuis le template: https://stackoverflow.com/questions/22162027/how-do-i-generate-a-static-html-file-from-a-django-template
     html_content = render_to_string(template, context)
 
-    pdf_path = convert_to_pdf(html_content, header, footer)
+    pdf_path = convert_to_pdf(html_content, header)
 
     # Servir le pdf:
     # https://ourcodeworld.com/articles/read/241/how-to-create-a-pdf-from-html-in-django
@@ -65,7 +65,7 @@ def render_pdf_from_template(template, header, footer, context):
         # Generate download
         response = HttpResponse(pdf_file, content_type='application/pdf')
 
-        os.remove(pdf_path)
+    os.remove(pdf_path)
 
     return response
 
