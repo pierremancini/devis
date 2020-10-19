@@ -62,10 +62,6 @@ class Devis(models.Model):
     # Text juste avant la partie réservée à la signature
     mention = models.TextField(blank=True, null=True)
 
-    # def get_absolute_url(self):
-    #     return reverse('devis:detail', args=[self.id])
-
-
     # def __str__(self):
     #     return self.titre + " n°id " + self.id
 
