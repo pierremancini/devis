@@ -43,8 +43,6 @@ def pdf(request, devis_id):
 
     line_objects = list(devis.grille_prix.ligneprix_set.all())
 
-    pprint(devis.grille_prix.total)
-
     # Consitution de la grille de prix
     context = {'titre': devis.titre,
                 'date_emission': devis.date_emission,
@@ -83,7 +81,6 @@ def pdf(request, devis_id):
 @login_required
 def preprint(request, devis_id):
     try:
-        # TODO: Construction du context du template à passer au template
         devis = Devis.objects.get(pk=devis_id)
 
         line_objects = list(devis.grille_prix.ligneprix_set.all())
@@ -344,7 +341,6 @@ def new_client(request):
 @login_required
 def modifier(request, devis_id):
     if request.method == 'GET':
-        devis = Devis.objects.get(pk=devis_id)
 
         # Récupérer les objects liés à devis
         form_devis = DevisForm(instance=devis)
@@ -356,7 +352,7 @@ def modifier(request, devis_id):
 
         line_objects =  list(devis.grille_prix.ligneprix_set.all())
     elif request.method == 'POST':
-        devis = Devis.objects.get(id=devis_id)
+
 
         # Récupérer les objects liés à devis
 
