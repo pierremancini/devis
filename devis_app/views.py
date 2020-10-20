@@ -338,6 +338,8 @@ def new_client(request):
 
 @login_required
 def modifier(request, devis_id):
+
+    devis = Devis.objects.get(pk=devis_id)
     if request.method == 'GET':
 
         # Récupérer les objects liés à devis
@@ -429,6 +431,14 @@ def modifier(request, devis_id):
                     montant = lines_form[n]['montant']
                 )
                 line_objects.append(ligne_prix)
+
+        return HttpResponseRedirect(reverse('devis:index'))
+    return render(request, 'devis_app/modifier.jinja', 
+        {'form_fk': form_fk,
+        'devis': form_devis,
+        'grille': form_grille,
+        'lines': line_objects,
+        'devis_id': devis_id})
 
 
 @login_required
