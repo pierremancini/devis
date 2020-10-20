@@ -84,7 +84,7 @@ $(document).ready(function(){
   // calcul des sous-totaux et du total
   $("#grille").on("input", ".prix-unite",  function(e) {
     // Empêche la saisi au-delà des décimales
-    this.value = this.value.match(/^\d+,?\d{0,2}/);
+    this.value = this.value.match(/^\d+.?\d{0,2}/);
     // calcul d'un sous-total
 
     set_sous_total();
