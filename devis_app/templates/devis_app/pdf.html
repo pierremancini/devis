@@ -1,3 +1,6 @@
+{% load static %}
+{% load to_coma %}
+
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -42,19 +45,18 @@
         <tr>
           <td>{{ line.designation }}</td>
           <td>{{ line.quantité }}</td>
-          <td>{{ line.prix_unit }}</td>
-          <td>{{ line.montant }}</td>
+          <td>{{ line.prix_unit|to_coma }}</td>
+          <td>{{ line.montant|to_coma }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
 
-    <div class='box'>{{mention_total}} {{grille.total}} {{grille.devise}}</div>
+    <div class='box'>
+      {{mention_total}} <div class="payer">  Net à payer {{grille.total|to_coma}} {{grille.devise}} </div>
+    </div>
 
-    <div>{{mention}}</div>
-    <p>Durée de validité du devis: 90 jours </p><br/>
-
-    <p>Le paiement des prestations interviendra par virement sur le compte bancaire dont le RIB a été communiqué au client.</p>
+    <div>{{mention|linebreaks}}</div>
     <br/>
 
     
