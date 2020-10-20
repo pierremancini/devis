@@ -430,6 +430,7 @@ def modifier(request, devis_id):
                     prix_unit = lines_form[n]['prix-unite'],
                     montant = lines_form[n]['montant']
                 )
+                ligne_prix.save()
                 line_objects.append(ligne_prix)
 
         return HttpResponseRedirect(reverse('devis:index'))
