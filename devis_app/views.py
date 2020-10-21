@@ -23,8 +23,8 @@ from datetime import datetime
 @login_required
 def index(request):
     try:
-        dernier_crees = Devis.objects.order_by('-date_creation')[:9]
-        dernier_emis = Devis.objects.exclude(date_emission=None).order_by('-date_emission')[:9]
+        dernier_crees = Devis.objects.filter(createur=request.user).order_by('-date_creation')[:9]
+        dernier_emis = Devis.objects.filter(createur=request.user).exclude(date_emission=None).order_by('-date_emission')[:9]
     except Devis.DoesNotExist:
         raise Http404("Devis n° {} inexistant".format(devis_id))
     return render(request, 'devis_app/index.html', {'dernier_crees': dernier_crees,
@@ -32,8 +32,8 @@ def index(request):
 
 @login_required
 def list_emetteur_client(request):    
-    emetteurs = Emeteur.objects.all()
-    clients = Client.objects.all()
+    emetteurs = Emeteur.objects.filter(createur=request.user)
+    clients = Client.objects.filter(createur=request.user)
 
     return render(request, 'devis_app/list.jinja', {'emetteurs': emetteurs,
         'clients': clients})
