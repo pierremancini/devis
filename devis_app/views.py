@@ -119,55 +119,6 @@ def new(request):
         else:
             date_creation = None
 
-        if  request.POST['date_emission']:
-            date_emission = atetime.strptime(request.POST['date_emission'], '%d/%m/%Y').strftime('%Y-%m-%d')
-        else:
-            date_emission = None
-
-        new_devis = Devis(
-            titre = request.POST['titre'],
-            emeteur = new_emetteur,
-            client = new_client,
-            grille_prix = new_grille,
-            date_creation = date_creation,
-            date_emission = date_emission,
-            num_emission = request.POST['num_emission'],
-            mention_total = request.POST['mention_total'],
-            mention = request.POST['mention'])
-
-        new_devis.save()
-
-        # Instanciation des objects ligne
-        lines = {}
-        for i in request.POST:
-            if re.match('^(l\d+)_(.*)$', i):
-                m = re.match('^l(\d+)_(.*)$', i)
-                line_num = m.group(1)
-                lines.setdefault(line_num, {})
-                field = m.group(2)
-                if field == 'designation':
-                    lines[line_num]['designation'] = request.POST[i]
-                elif field == 'quantity':
-                    lines[line_num]['quantity'] = request.POST[i]
-                elif field == 'prix-unite':
-                    lines[line_num]['prix-unite'] = request.POST[i].replace(',', '.')
-
-        for n in lines:
-            ligne_prix = LignePrix(
-                grille_prix = new_grille,
-                designation = lines[n]['designation'],
-                quantité = lines[n]['quantity'],
-                prix_unit = lines[n]['prix-unite']
-            )
-
-            ligne_prix.save()
-        return HttpResponseRedirect(reverse('devis:index'))
-
-    return render(request, 'devis_app/tabs_new.html', 
-        {'devis': form_devis, 
-        'emetteur': form_emetteur,
-        'client': form_client,
-        'grille': form_grille})
 
 @login_required
 def new_devis(request):
