@@ -17,7 +17,6 @@ urlpatterns = [
     # ex: /devis/5/preprint/
     path('<int:devis_id>/preprint/', views.preprint, name="preprint"),
     # exemple: /devis/nouveau/
-    path('nouveau/', views.new, name="nouveau"),
     path('creer_devis/', views.new_devis, name="new_devis"),
     path('creer_emetteur/', views.new_emetteur, name="new_emetteur"),
     path('creer_client/', views.new_client, name="new_client"),
