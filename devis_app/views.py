@@ -12,6 +12,8 @@ from .models import Devis, Emeteur, Client, GrillePrix, LignePrix
 from .forms import DevisForm, EmetteurForm, ClientForm, GrillePrixForm
 from django.forms import modelformset_factory
 
+from django.core.exceptions import PermissionDenied
+
 from .utils import render_pdf_from_template
 
 from pprint import pprint
@@ -35,46 +37,6 @@ def list_emetteur_client(request):
 
     return render(request, 'devis_app/list.jinja', {'emetteurs': emetteurs,
         'clients': clients})
-
-@login_required
-def pdf(request, devis_id):
-
-    devis = Devis.objects.get(pk=devis_id)
-
-    line_objects = list(devis.grille_prix.ligneprix_set.all())
-
-    # Consitution de la grille de prix
-    context = {'titre': devis.titre,
-                'date_emission': devis.date_emission,
-                'num_emission': devis.num_emission,
-                'mention_total': devis.mention_total,
-                'mention': devis.mention,
-                'devise': devis.grille_prix.devise,
-                'nom_emetteur': devis.emeteur.nom,
-                'adresse_emetteur': devis.emeteur.adresse,
-                'email_emetteur': devis.emeteur.email,
-                'telephone_emetteur': devis.emeteur.telephone,
-                'fax_emetteur': devis.emeteur.fax,
-                'SIRET': devis.emeteur.SIRET,
-                'code_APE': devis.emeteur.code_APE,
-                'image_signature': devis.emeteur.image_signature,
-                'nom_client': devis.client.nom,
-                'adresse_client': devis.client.adresse,
-                'email_client': devis.client.email,
-                'telephone_client': devis.client.telephone,
-                'fax_client': devis.client.fax,
-                'lines': line_objects,
-                'grille': devis.grille_prix
-        }
-
-    date = datetime.today().strftime('%d-%m-%Y')
-    header = 'Devis n° {} - {}'.format(devis.num_emission, date)
-    template = 'devis_app/pdf.html'
-
-    response = render_pdf_from_template(template, header, context)
-    response['Content-Disposition'] = 'attachment; filename="{}-{}.pdf"'.format(devis.titre, date)
-
-    return response
 
 @login_required
 def preprint(request, devis_id):
@@ -336,10 +298,59 @@ def new_client(request):
         return HttpResponseRedirect(reverse('devis:index'))
     return render(request, 'devis_app/new_object.jinja', {'view': form, 'type': 'Client'})
 
+
+def creator_auth_required(request, object):
+    if request.user != object.createur:
+       raise PermissionDenied
+
+@login_required
+def pdf(request, devis_id):
+
+    devis = Devis.objects.get(pk=devis_id)
+    creator_auth_required(request, devis)
+
+    line_objects = list(devis.grille_prix.ligneprix_set.all())
+
+    # Consitution de la grille de prix
+    context = {'titre': devis.titre,
+                'date_emission': devis.date_emission,
+                'num_emission': devis.num_emission,
+                'mention_total': devis.mention_total,
+                'mention': devis.mention,
+                'devise': devis.grille_prix.devise,
+                'nom_emetteur': devis.emeteur.nom,
+                'adresse_emetteur': devis.emeteur.adresse,
+                'email_emetteur': devis.emeteur.email,
+                'telephone_emetteur': devis.emeteur.telephone,
+                'fax_emetteur': devis.emeteur.fax,
+                'SIRET': devis.emeteur.SIRET,
+                'code_APE': devis.emeteur.code_APE,
+                'image_signature': devis.emeteur.image_signature,
+                'nom_client': devis.client.nom,
+                'adresse_client': devis.client.adresse,
+                'email_client': devis.client.email,
+                'telephone_client': devis.client.telephone,
+                'fax_client': devis.client.fax,
+                'lines': line_objects,
+                'grille': devis.grille_prix
+        }
+
+    date = datetime.today().strftime('%d-%m-%Y')
+    header = 'Devis n° {} - {}'.format(devis.num_emission, date)
+    template = 'devis_app/pdf.html'
+
+    response = render_pdf_from_template(template, header, context)
+    response['Content-Disposition'] = 'attachment; filename="{}-{}.pdf"'.format(devis.titre, date)
+
+    return response
+
+
 @login_required
 def modifier(request, devis_id):
 
     devis = Devis.objects.get(pk=devis_id)
+    creator_auth_required(request, devis)
+
     if request.method == 'GET':
 
         # Récupérer les objects liés à devis
@@ -444,8 +455,11 @@ def modifier(request, devis_id):
 
 @login_required
 def modifier_tout(request, devis_id):
+
+    devis = Devis.objects.get(pk=devis_id)
+    creator_auth_required(request, devis)
+
     if request.method == 'GET':
-        devis = Devis.objects.get(pk=devis_id)
 
         # Récupérer les objects liés à devis
 
@@ -457,7 +471,6 @@ def modifier_tout(request, devis_id):
         lines = devis.grille_prix.ligneprix_set.all()
 
     elif request.method == 'POST':
-        devis = Devis.objects.get(pk=devis_id)
 
         # Récupérer les objects liés à devis
         form_devis = DevisForm(instance=devis)
@@ -544,17 +557,20 @@ def modifier_tout(request, devis_id):
 @login_required
 def delete(request, devis_id):
     devis = Devis.objects.get(pk=devis_id)
+    creator_auth_required(request, devis)
     devis.delete()
     return redirect('/devis')
 
 @login_required
 def delete_emetteur(request, emetteur_id):
     emetteur = Emeteur.objects.get(pk=emetteur_id)
+    creator_auth_required(request, emetteur)
     emetteur.delete()
     return redirect('/devis/list_emetteur_client/')
 
 @login_required
 def delete_client(request, client_id):
     client = Client.objects.get(pk=client_id)
+    creator_auth_required(request, client)
     client.delete()
     return redirect('/devis/list_emetteur_client/')
