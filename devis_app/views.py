@@ -77,7 +77,7 @@ def preprint(request, devis_id):
 
 def next_num_emission(request):
 
-    next_num = Devis.objects.filter(createur=request.user).aggregate(Max('num_emission'))['num_emission__max']
+    next_num = Devis.objects.filter(createur=request.user).aggregate(Max('num_emission'))['num_emission__max'] + 1
     return next_num
 
 
