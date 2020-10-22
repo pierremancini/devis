@@ -25,7 +25,7 @@ from datetime import datetime
 @login_required
 def index(request):
     try:
-        dernier_crees = Devis.objects.filter(createur=request.user).order_by('-date_creation')[:9]
+        dernier_crees = Devis.objects.filter(createur=request.user, date_emission=None).order_by('-date_creation')[:9]
         dernier_emis = Devis.objects.filter(createur=request.user).exclude(date_emission=None).order_by('-date_emission')[:9]
     except Devis.DoesNotExist:
         raise Http404("Devis n° {} inexistant".format(devis_id))
