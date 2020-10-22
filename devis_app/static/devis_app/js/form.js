@@ -111,5 +111,10 @@ $(document).ready(function(){
 
   $("#id_date_creation").datepicker({ dateFormat: 'yy-mm-dd' });
   $("#id_date_emission").datepicker({ dateFormat: 'yy-mm-dd' });
+
+  $("#take_num").click(function() {
+    $("#num_emission").val($("#next_num_emission").val());
+  });
+
 });
 

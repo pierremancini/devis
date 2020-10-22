@@ -10,9 +10,11 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .models import Devis, Emeteur, Client, GrillePrix, LignePrix
 from .forms import DevisForm, EmetteurForm, ClientForm, GrillePrixForm
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, formset_factory
 
 from django.core.exceptions import PermissionDenied
+
+from django.db.models import Max
 
 from .utils import render_pdf_from_template
 
@@ -73,51 +75,10 @@ def preprint(request, devis_id):
         raise Http404("Devis n° {} inexistant".format(devis_id))
     return render(request, 'devis_app/pdf.html', context)
 
-# Ancienne view, apporter des modifications pour utiliser
-@login_required
-def new(request):
-    if request.method == 'GET':
-        form_devis = DevisForm()
-        form_emetteur = EmetteurForm()
-        form_client = ClientForm()
-        form_grille = GrillePrixForm()
-    elif request.method == 'POST':
-        form_devis = DevisForm(request.POST)
-        form_emetteur = EmetteurForm(request.POST)
-        form_client = ClientForm(request.POST)
-        form_grille = GrillePrixForm(request.POST)
+def next_num_emission(request):
 
-        new_client = Client(
-            nom = request.POST['nom_client'],
-            adresse = request.POST['adresse_client'],
-            email = request.POST['email_client'],
-            telephone = request.POST['telephone_client'],
-            fax = request.POST['fax_client']
-        )
-
-        new_emetteur = Emeteur(
-            nom = request.POST['nom_emetteur'],
-            adresse = request.POST['adresse_emetteur'],
-            email = request.POST['email_emetteur'],
-            telephone = request.POST['telephone_emetteur'],
-            fax = request.POST['fax_emetteur'],
-            SIRET = request.POST['SIRET'],
-            code_APE = request.POST['code_APE'],
-            image_signature = request.POST['image_signature']
-        )
-
-        new_grille = GrillePrix(
-            devise = request.POST['devise']
-        )
-
-        new_client.save()
-        new_emetteur.save()
-        new_grille.save()
-
-        if request.POST['date_creation']:
-            date_creation = datetime.strptime(request.POST['date_creation'], '%d/%m/%Y').strftime('%Y-%m-%d')
-        else:
-            date_creation = None
+    next_num = Devis.objects.filter(createur=request.user).aggregate(Max('num_emission'))['num_emission__max']
+    return next_num
 
 
 @login_required
@@ -131,6 +92,8 @@ def new_devis(request):
 
         form_fk = form_set_fk.form
 
+        num_emission = 0
+
     elif request.method == 'POST':
         form_devis = DevisForm(request.POST)
         form_grille = GrillePrixForm(request.POST)
@@ -142,7 +105,6 @@ def new_devis(request):
         client = Client.objects.get(pk=request.POST['client'])
 
         emetteur = Emeteur.objects.get(pk=request.POST['emeteur'])
-
 
         new_grille = GrillePrix(
             devise = request.POST['devise'],
@@ -160,6 +122,11 @@ def new_devis(request):
             date_emission = request.POST['date_emission']
         else:
             date_emission = None
+
+        if request.POST['num_emission']:
+            num_emission = request.POST['num_emission']
+        else:
+            num_emission = 0
        
         new_devis = Devis(
             titre = request.POST['titre'],
@@ -207,7 +174,9 @@ def new_devis(request):
     return render(request, 'devis_app/new_devis.jinja',
         {'devis': form_devis,
         'grille': form_grille,
-        'form_fk': form_fk})
+        'form_fk': form_fk,
+        'num_emission': num_emission,
+        'next_num_emission': next_num_emission(request)})
 
 @login_required
 def new_emetteur(request):
@@ -301,6 +270,7 @@ def modifier(request, devis_id):
 
     devis = Devis.objects.get(pk=devis_id)
     creator_auth_required(request, devis)
+    num_emission = devis.num_emission
 
     if request.method == 'GET':
 
@@ -401,7 +371,9 @@ def modifier(request, devis_id):
         'devis': form_devis,
         'grille': form_grille,
         'lines': line_objects,
-        'devis_id': devis_id})
+        'devis_id': devis_id,
+        'num_emission': num_emission,
+        'next_num_emission': next_num_emission(request)})
 
 
 @login_required

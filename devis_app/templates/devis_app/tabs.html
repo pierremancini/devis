@@ -77,6 +77,12 @@
         <div class="subtitle" style="float: right; padding-right: 20px" >Total: <input name="total" id="total" size="2" value="{{ total }}" type="text"> <span class="devise-holder" style="display:inline"></span></div>
       </div>
       <table class="panel" id="form-info-devis" style="visibility:collapse">
+        <tr><th><label for="id_form-0-next_num_emission">Next num emission:</label></th>
+          <td>
+            <input type="number" name="num_emission" value="{{num_emission}}" id="num_emission">
+            <a id="take_num"><i class="fas fa-arrow-left"></i></a>
+            <div>Prochain numéro d'émission: <input value="{{next_num_emission}}" id="next_num_emission" disabled></div>
+          </td></tr>
         {{form_fk}}
         {{devis}}
       </table>

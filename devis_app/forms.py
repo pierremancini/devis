@@ -8,7 +8,7 @@ class DevisForm(forms.ModelForm):
     date_emission = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
     class Meta:
         model = Devis
-        fields = ['titre', 'date_creation', 'date_emission', 'num_emission', 'mention_total', 'mention']
+        fields = ['titre', 'date_creation', 'date_emission', 'mention_total', 'mention']
 
 FIELD_NAME_EMETTEUR = {
     'nom': 'nom_emetteur',
