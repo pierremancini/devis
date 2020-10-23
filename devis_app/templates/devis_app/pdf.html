@@ -33,7 +33,7 @@
         {% if fax_client %}Fax: {{ fax_client }}<br/>{% endif %}<br/>
       </p>
     </div>
-    <div id="grille">La grille</div>
+    <div id="grille">
     <table class="table is-bordered is-striped is-fullwidth">
       <thead>
         <tr>
@@ -51,6 +51,7 @@
       {% endfor %}
       </tbody>
     </table>
+    </div>
 
     <div class='box'>
       {{mention_total}} <div class="payer">  Net à payer {{grille.total|to_coma}} {{grille.devise}} </div>
