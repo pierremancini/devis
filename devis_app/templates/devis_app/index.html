@@ -21,8 +21,8 @@
       <ul>
         {% for devis_cree in dernier_crees %}
         <li>
-          <span>{{devis_cree.date_creation}}</span> ---
-          <a href="{% url 'devis:modifier' devis_cree.id %}">{{ devis_cree.titre }} <i class="fas fa-edit"></i></a> </br> --- 
+          <span>{{ devis_cree.titre }} > {{ devis_cree.client.nom }} - {{devis_cree.date_creation}}</span> </br>
+          <a href="{% url 'devis:modifier' devis_cree.id %}"> <i class="fas fa-edit"></i></a>  --- 
           <a href="{% url 'devis:detail' devis_cree.id %}"><i class="fas fa-eye"></i></a> --- 
           <a href="{% url 'devis:delete' devis_cree.id %}"><i class="fas fa-trash-alt"></i></a> --- 
           <a href="{% url 'devis:pdf' devis_cree.id %}"><i class="fas fa-file-pdf"></i></a>
@@ -39,8 +39,8 @@
       <ul>
         {% for devis_emis in dernier_emis %}
           <li>
-          <span>{{devis_emis.date_creation}}</span> ---
-          <a href="{% url 'devis:modifier' devis_emis.id %}">{{ devis_emis.titre }} <i class="fas fa-edit"></i></a> </br> --- 
+          <span> {{ devis_emis.titre }} > {{ devis_emis.client.nom }} - {{devis_emis.date_creation}}</span> </br>
+          <a href="{% url 'devis:modifier' devis_emis.id %}"> <i class="fas fa-edit"></i></a>  --- 
           <a href="{% url 'devis:detail' devis_emis.id %}"><i class="fas fa-eye"></i></a> --- 
           <a href="{% url 'devis:delete' devis_emis.id %}"><i class="fas fa-trash-alt"></i></a> --- 
           <a href="{% url 'devis:pdf' devis_emis.id %}"><i class="fas fa-file-pdf"></i></a>
