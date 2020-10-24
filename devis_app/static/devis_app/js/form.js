@@ -13,17 +13,17 @@ function set_total() {
     }
   });
   total = roundDecimal(total).toFixed(2);
-  $("#total").val(total.toString().replace('.', ','));
+  $("#total").val(total.toString());
   return $("#total");
 }
 
 function set_sous_total() {
   $("#grille > tbody > tr").each(function() {
     var quantity_int = parseInt($( this ).find('.quantity').val());
-    var prix_float = parseFloat($( this ).find('.prix-unite').val().replace(',','.'));
+    var prix_float = parseFloat($( this ).find('.prix-unite').val());
     var product = quantity_int * prix_float;
     if (product !== NaN) {
-      var sous_total = roundDecimal(product).toFixed(2).toString().replace('.', ',');
+      var sous_total = roundDecimal(product).toFixed(2).toString();
       $( this ).find(".sous-total").val(sous_total);
     }
   });
@@ -84,7 +84,7 @@ $(document).ready(function(){
   // calcul des sous-totaux et du total
   $("#grille").on("input", ".prix-unite",  function(e) {
     // Empêche la saisi au-delà des décimales
-    this.value = this.value.match(/^\d+.?\d{0,2}/);
+    this.value = this.value.match(/^\d+\.?\d{0,2}/);
     // calcul d'un sous-total
 
     set_sous_total();
