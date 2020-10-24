@@ -96,6 +96,12 @@ $(document).ready(function(){
     set_total();
   });
 
+  $("#grille").on("focusout", ".prix-unite",  function(e) {
+    // Empêche la saisi au-delà des décimales
+    this.value = Number.parseFloat(this.value).toFixed(2);
+    // calcul d'un sous-total
+  });
+
   $("#grille").on("input", ".quantity", function(e) {
 
     // Saisi d'entiers uniquement
