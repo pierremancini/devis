@@ -9,11 +9,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Devis</title>
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.5/css/bulma.min.css"/>
-    <link rel="stylesheet" href="templates/devis.css"/>
+    <link rel="stylesheet" href="{% static 'devis_app/css/print_devis.css' %}"/>
   </head>
   <body>
     <h2 class="subtitle devis"> {{titre}}</h2>
-    <div class="box" id="emetteur">
+    <div class="box is-radiusless" id="emetteur">
       <p>
         {{nom_emetteur}}<br/>
         {{adresse_emetteur|linebreaks}}
@@ -23,7 +23,7 @@
         Code APE: {{code_APE}}<br/>
       </p>
     </div>
-    <div class="box client" id="client">
+    <div class="box client is-radiusless" id="client">
       <h2 class="subtitle client">Le client:</h2>
       <p>
         {{nom_client}}<br/>
