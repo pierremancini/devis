@@ -323,6 +323,7 @@ def modifier(request, devis_id):
         devis.mention_total = request.POST['mention_total']
         devis.mention = request.POST['mention']
 
+        devis.grille_prix.save()
         devis.save()
         form_devis = DevisForm(instance=devis)
 
