@@ -20,10 +20,10 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('devis/', include('devis_app.urls'), name='devis'),
-    path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', views.accueil, name='accueil')
+    path('gestion/devis/', include('devis_app.urls'), name='devis'),
+    path('gestion/admin/', admin.site.urls),
+    path('gestion/accounts/', include('django.contrib.auth.urls')),
+    path('gestion/', views.accueil, name='accueil')
 ]
 
 
