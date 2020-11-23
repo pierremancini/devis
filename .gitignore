@@ -1,5 +1,8 @@
 exemples
 *.pdf
+
+*.back
+
 .vscode
 templates/images
 __pycache__
