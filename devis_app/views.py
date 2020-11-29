@@ -404,7 +404,6 @@ def modifier_tout(request, devis_id):
 
         lines = devis.grille_prix.ligneprix_set.all()
 
-        # TODO: Ne pas réinstancier un client et un emetteur à chaque modifications
         client = Client(
             nom = request.POST['nom_client'],
             adresse = request.POST['adresse_client'],
